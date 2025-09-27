@@ -1,0 +1,221 @@
+﻿using UnityEngine;
+using UnityEditor;
+using UnityEditor.Timeline;
+using UnityEngine.Timeline;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using UnityEngine.Playables;
+
+public class SkillEditorWindow : EditorWindow
+{
+    private TimelineAsset timelineAsset;
+    private string skillName = "New Skill";
+    private PlayableDirector playableDirector;
+
+    [MenuItem("Window/技能编辑器")]
+    public static void ShowWindow()
+    {
+        GetWindow<SkillEditorWindow>("技能编辑器");
+    }
+
+    private void OnGUI()
+    {
+        GUILayout.Label("技能设置", EditorStyles.boldLabel);
+        
+        skillName = EditorGUILayout.TextField("技能名", skillName);
+        timelineAsset = EditorGUILayout.ObjectField("Timeline Asset", timelineAsset, typeof(TimelineAsset), false) as TimelineAsset;
+        playableDirector = EditorGUILayout.ObjectField("Playable Director", playableDirector, typeof(PlayableDirector), true) as PlayableDirector;
+
+        GUILayout.Space(20);
+        
+        if (GUILayout.Button("Open Timeline Editor"))
+        {
+            if (timelineAsset != null)
+            {
+                TimelineEditorWindow window = EditorWindow.GetWindow<TimelineEditorWindow>();
+                window.Show();
+                window.SetTimeline(timelineAsset);
+                if (playableDirector != null)
+                {
+                    playableDirector.playableAsset = timelineAsset;
+                }
+            }
+            else
+            {
+                Debug.LogWarning("Please assign a Timeline Asset first!");
+            }
+        }
+
+        GUILayout.Space(10);
+        
+        if (GUILayout.Button("Create New Timeline"))
+        {
+            CreateNewTimeline();
+        }
+
+        GUILayout.Space(20);
+        GUILayout.Label("Export Settings", EditorStyles.boldLabel);
+        
+        if (GUILayout.Button("Export Skill Data"))
+        {
+            if (timelineAsset == null)
+            {
+                Debug.LogWarning("Please assign a Timeline Asset first!");
+                return;
+            }
+            
+            ExportSkillData();
+        }
+
+        GUILayout.Space(10);
+        
+        if (GUILayout.Button("Play Skill"))
+        {
+            if (playableDirector != null && timelineAsset != null)
+            {
+                playableDirector.Play(timelineAsset);
+            }
+            else
+            {
+                Debug.LogWarning("Please assign both Timeline Asset and Playable Director!");
+            }
+        }
+    }
+
+    private void CreateNewTimeline()
+    {
+        string path = EditorUtility.SaveFilePanelInProject("Create Timeline", "SkillTimeline", "playable", "Create a new timeline asset");
+        if (!string.IsNullOrEmpty(path))
+        {
+            timelineAsset = TimelineAsset.CreateInstance<TimelineAsset>();
+            AssetDatabase.CreateAsset(timelineAsset, path);
+            AssetDatabase.SaveAssets();
+            
+            // 添加默认轨道
+            timelineAsset.CreateTrack<AnimationParameterTrack>(null, "Animations");
+            timelineAsset.CreateTrack<EffectTrack>(null, "Effects");
+            timelineAsset.CreateTrack<BuffTrack>(null, "Buffs");
+            timelineAsset.CreateTrack<SummonTrack>(null, "Summons");
+        }
+    }
+
+    private void ExportSkillData()
+    {
+        SkillData skillData = new SkillData();
+        skillData.skillName = skillName;
+        skillData.duration = (float)timelineAsset.duration;
+
+        // 收集所有轨道数据
+        foreach (var track in timelineAsset.GetOutputTracks())
+        {
+            if (track is AnimationParameterTrack animTrack)
+            {
+                AnimationTrackData animData = new AnimationTrackData();
+                animData.trackName = track.name;
+                
+                foreach (var clip in track.GetClips())
+                {
+                    AnimationParameterClip animClip = clip.asset as AnimationParameterClip;
+                    if (animClip != null)
+                    {
+                        AnimationClipData clipData = new AnimationClipData();
+                        clipData.clipName = animClip.template.animationClip != null ? animClip.template.animationClip.name : "";
+                        clipData.startTime = (float)clip.start;
+                        clipData.duration = (float)clip.duration;
+                        clipData.speed = animClip.template.speed;
+                        clipData.weight = animClip.template.weight;
+                        clipData.loop = animClip.template.loop;
+                        
+                        animData.clips.Add(clipData);
+                    }
+                }
+                
+                skillData.animationTracks.Add(animData);
+            }
+            else if (track is EffectTrack effectTrack)
+            {
+                EffectTrackData effectData = new EffectTrackData();
+                effectData.trackName = track.name;
+                
+                foreach (var clip in track.GetClips())
+                {
+                    EffectClip effectClip = clip.asset as EffectClip;
+                    if (effectClip != null)
+                    {
+                        EffectClipData clipData = new EffectClipData();
+                        clipData.effectPrefabPath = AssetDatabase.GetAssetPath(effectClip.template.effectPrefab);
+                        clipData.startTime = (float)clip.start;
+                        clipData.duration = (float)clip.duration;
+                        clipData.positionOffset = effectClip.template.positionOffset;
+                        clipData.rotationOffset = effectClip.template.rotationOffset;
+                        clipData.scale = effectClip.template.scale;
+                        clipData.followTarget = effectClip.template.followTarget;
+                        clipData.attachPoint = effectClip.template.attachPoint;
+                        
+                        effectData.effects.Add(clipData);
+                    }
+                }
+                
+                skillData.effectTracks.Add(effectData);
+            }
+            else if (track is BuffTrack buffTrack)
+            {
+                BuffTrackData buffData = new BuffTrackData();
+                buffData.trackName = track.name;
+                
+                foreach (var clip in track.GetClips())
+                {
+                    BuffClip buffClip = clip.asset as BuffClip;
+                    if (buffClip != null)
+                    {
+                        BuffClipData clipData = new BuffClipData();
+                        clipData.buffId = buffClip.template.buffId;
+                        clipData.startTime = (float)clip.start;
+                        clipData.duration = (float)clip.duration;
+                        clipData.parameters = buffClip.template.parameters;
+                        clipData.isPermanent = buffClip.template.isPermanent;
+                        
+                        buffData.buffs.Add(clipData);
+                    }
+                }
+                
+                skillData.buffTracks.Add(buffData);
+            }
+            else if (track is SummonTrack summonTrack)
+            {
+                SummonTrackData summonData = new SummonTrackData();
+                summonData.trackName = track.name;
+                
+                foreach (var clip in track.GetClips())
+                {
+                    SummonClip summonClip = clip.asset as SummonClip;
+                    if (summonClip != null)
+                    {
+                        SummonClipData clipData = new SummonClipData();
+                        clipData.startTime = (float)clip.start;
+                        clipData.position = summonClip.template.positionOffset;
+                        clipData.rotation = summonClip.template.rotationOffset;
+                        
+                        summonData.summons.Add(clipData);
+                    }
+                }
+                
+                skillData.summonTracks.Add(summonData);
+            }
+        }
+
+        // 导出为二进制
+        string exportPath = EditorUtility.SaveFilePanel("Export Skill Data", Application.dataPath, skillName, "skill");
+        if (!string.IsNullOrEmpty(exportPath))
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+            using (FileStream stream = new FileStream(exportPath, FileMode.Create))
+            {
+                formatter.Serialize(stream, skillData);
+            }
+            
+            Debug.Log("Skill data exported successfully to: " + exportPath);
+            AssetDatabase.Refresh();
+        }
+    }
+}
