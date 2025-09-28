@@ -2,20 +2,38 @@
 using GameFramework;
 using UnityEngine;
 
-namespace GameLogic
+namespace GameLogic.Game
 {
+    public enum ProjectileState
+    {
+        Running,
+        Destroyed,
+    }
+
     public class Projectile : IReference
     {
+        //子弹行为
         protected ProjectileBehavior Behavior;
+
         //当前位置
         public Vector3 CurrentPosition => Behavior.Current;
+        //子弹当前朝向
         public Vector3 CurrentDirection => Behavior.CurrentDirection;
-        public ProjectileConfig ProjectileConfig { get; set; }
+        //子弹状态
+        public ProjectileState State { get; set; } = ProjectileState.Running;
 
-        public void Init(ProjectileConfig projectileConfig, Vector3 position , Vector3 direction)
+        //子弹配置
+        public ProjectileConfig ProjectileConfig { get; set; }
+        
+        //子弹位移id
+        public ProjectileInstanceId InstanceId { get; set; }
+
+        public void Init(ProjectileInstanceId instanceId ,ProjectileConfig projectileConfig, Vector3 position , Vector3 direction)
         {
+            InstanceId = instanceId;
             CreateBehavior(projectileConfig.MoveType,position,direction,projectileConfig);
             ProjectileConfig = projectileConfig;
+            State = ProjectileState.Running;
         }
 
         public void DoUpdate(float dt)
@@ -41,8 +59,16 @@ namespace GameLogic
             Behavior.Init(position,direction,projectileConfig);
         }
 
+        public void DestroySelf()
+        {
+            State = ProjectileState.Destroyed;
+        }
+
         public void Clear()
         {
+            ProjectileConfig = null;
+            InstanceId = default;
+            State = ProjectileState.Running;
             ReferencePool.Release(Behavior);
         }
     }

@@ -5,16 +5,18 @@ using GameFramework;
 using GameProto;
 using UnityEngine;
 
-namespace GameLogic
+namespace GameLogic.Game
 {
     public class ProjectileManager : BaseLogicSys<ProjectileManager>
     {
         private IProjectileView _projectileView;
-        private List<Projectile> _projectiles;
+        private Dictionary<ProjectileInstanceId,Projectile> _projectiles;
+        private Queue<ProjectileInstanceId> _destroyQueue;
 
         public override bool OnInit()
         {
-            _projectiles = new List<Projectile>();
+            _projectiles = new Dictionary<ProjectileInstanceId, Projectile>();
+            _destroyQueue = new Queue<ProjectileInstanceId>();
             return base.OnInit();
         }
 
@@ -32,10 +34,20 @@ namespace GameLogic
         public void CreateProjectile<T>(int projectId , Vector3 position , Vector3 direction) where T : Projectile, new()
         {
             Projectile projectile = ReferencePool.Acquire<T>();
+            ProjectileInstanceId instanceId = ProjectileInstanceId.NewId();
             ProjectileConfig config = ConfigSystem.Instance.Tables.TbProjectile.Get(projectId);
-            projectile.Init(config, position, direction);
-            _projectiles.Add(projectile);
+            projectile.Init(instanceId,config, position, direction);
+            _projectiles.Add(instanceId,projectile);
             _projectileView.CreateProjectile(projectile);
+        }
+
+        public void DestroyProjectile(ProjectileInstanceId instanceId)
+        {
+            if (_projectiles.TryGetValue(instanceId,out var projectile))
+            {
+                projectile.DestroySelf();
+                _projectileView.DestroyProjectile(instanceId);
+            }
         }
 
         public override void OnUpdate()
@@ -43,11 +55,42 @@ namespace GameLogic
             base.OnUpdate();
             if (_projectiles != null)
             {
-                for (int i = _projectiles.Count - 1; i >= 0; i--)
+                foreach (var projectile in _projectiles)
                 {
-                    _projectiles[i].DoUpdate(Time.deltaTime);
+                    projectile.Value.DoUpdate(Time.deltaTime);
+                    if (projectile.Value.State == ProjectileState.Destroyed)
+                    {
+                        _destroyQueue.Enqueue(projectile.Key);
+                    }
                 }
             }
+            _projectileView?.DoUpdate(Time.deltaTime);
+            ProcessDestroyQueue();
+        }
+
+        private void ProcessDestroyQueue()
+        {
+            while (_destroyQueue.Count > 0)
+            {
+                ProjectileInstanceId id = _destroyQueue.Dequeue();
+                if (_projectiles.TryGetValue(id, out var projectile))
+                {
+                    _projectiles.Remove(id);
+                    ReferencePool.Release(projectile);
+                    _projectileView.RealDestroyProjectile(id);
+                }
+            }
+        }
+
+        public void ClearScene()
+        {
+            foreach (var projectile in _projectiles)
+            {
+                ReferencePool.Release(projectile.Value);
+            }
+            _projectiles.Clear();
+            _projectileView.ClearScene();
+            ProjectileInstanceIdGenerator.ClearCache();
         }
     }
 }

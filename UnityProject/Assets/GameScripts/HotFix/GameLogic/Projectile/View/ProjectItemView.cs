@@ -1,7 +1,7 @@
 ﻿using GameLogic.Game.Effect;
 using UnityEngine;
 
-namespace GameLogic
+namespace GameLogic.Game
 {
     public class ProjectItemView : MonoBehaviour
     {
@@ -18,6 +18,11 @@ namespace GameLogic
 
         public void DoUpdate(float dt)
         {
+            Vector3 startPos = transform.position;
+            Vector3 endPos = _projectile.CurrentPosition;
+            //射线检测
+            Ray ray = new Ray(startPos, endPos - startPos);
+            
             transform.position = _projectile.CurrentPosition;
             transform.forward = _projectile.CurrentDirection;
         }

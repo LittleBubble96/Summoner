@@ -1,11 +1,18 @@
 ﻿using UnityEngine;
 
-namespace GameLogic
+namespace GameLogic.Game
 {
     public interface IProjectileView
     {
-        public void CreateProjectile(Projectile projectile);
+        void CreateProjectile(Projectile projectile);
 
-        public void ClearScene();
+        void DoUpdate(float dt);
+        
+        //销毁子弹 但不是立即销毁
+        void DestroyProjectile(ProjectileInstanceId instanceId);
+        //实际销毁子弹 立即销毁
+        void RealDestroyProjectile(ProjectileInstanceId instanceId);
+
+        void ClearScene();
     }
 }

@@ -20,10 +20,12 @@ namespace GameLogic
             OnInit(projectileConfig);
         }
 
-        public void Clear()
+        public virtual void Clear()
         {
             StartPosition = Vector3.zero;
             Direction = Vector3.zero;
+            Current = Vector3.zero;
+            CurrentDirection = Vector3.zero;
         }
 
         protected virtual void OnInit(ProjectileConfig projectileConfig)
