@@ -27,7 +27,7 @@ namespace GameLogic.Game
             {
                 return;
             }
-            float speed = Character.Speed;
+            float speed = Character.GetMoveSpeed();
             float angleSpeed = Character.AngleSpeed;
             
             // 获取输入

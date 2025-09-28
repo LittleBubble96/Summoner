@@ -14,6 +14,8 @@ namespace GameLogic.Game
     {
         //子弹行为
         protected ProjectileBehavior Behavior;
+        //子弹包含的数据
+        public ProjectileData ProjectileData { get; set; }
 
         //当前位置
         public Vector3 CurrentPosition => Behavior.Current;
@@ -28,11 +30,12 @@ namespace GameLogic.Game
         //子弹位移id
         public ProjectileInstanceId InstanceId { get; set; }
 
-        public void Init(ProjectileInstanceId instanceId ,ProjectileConfig projectileConfig, Vector3 position , Vector3 direction)
+        public void Init(ProjectileInstanceId instanceId ,ProjectileConfig projectileConfig, Vector3 position , Vector3 direction , ProjectileData projectileData)
         {
             InstanceId = instanceId;
             CreateBehavior(projectileConfig.MoveType,position,direction,projectileConfig);
             ProjectileConfig = projectileConfig;
+            ProjectileData = projectileData;
             State = ProjectileState.Running;
         }
 
@@ -70,6 +73,7 @@ namespace GameLogic.Game
             InstanceId = default;
             State = ProjectileState.Running;
             ReferencePool.Release(Behavior);
+            ReferencePool.Release(ProjectileData);
         }
     }
 }

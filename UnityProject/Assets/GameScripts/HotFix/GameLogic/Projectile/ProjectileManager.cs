@@ -28,19 +28,21 @@ namespace GameLogic.Game
         /// <summary>
         /// 创建子弹
         /// </summary>
-        /// <param name="projectId">子弹id</param>
-        /// <param name="position">位置</param>
-        /// <param name="direction">方向</param>
-        public void CreateProjectile<T>(int projectId , Vector3 position , Vector3 direction) where T : Projectile, new()
+        public void CreateProjectile<T>(int projectId , Vector3 position , Vector3 direction , ActorInstanceId ownerId) where T : Projectile, new()
         {
             Projectile projectile = ReferencePool.Acquire<T>();
+            ProjectileData projectileData = ReferencePool.Acquire<ProjectileData>();
+            projectileData.OwnerId = ownerId;
             ProjectileInstanceId instanceId = ProjectileInstanceId.NewId();
             ProjectileConfig config = ConfigSystem.Instance.Tables.TbProjectile.Get(projectId);
-            projectile.Init(instanceId,config, position, direction);
+            projectile.Init(instanceId,config, position, direction ,projectileData);
             _projectiles.Add(instanceId,projectile);
             _projectileView.CreateProjectile(projectile);
         }
 
+        /// <summary>
+        /// 销毁子弹
+        /// </summary>
         public void DestroyProjectile(ProjectileInstanceId instanceId)
         {
             if (_projectiles.TryGetValue(instanceId,out var projectile))
@@ -67,7 +69,8 @@ namespace GameLogic.Game
             _projectileView?.DoUpdate(Time.deltaTime);
             ProcessDestroyQueue();
         }
-
+        
+        //执行销毁队列
         private void ProcessDestroyQueue()
         {
             while (_destroyQueue.Count > 0)
@@ -82,6 +85,7 @@ namespace GameLogic.Game
             }
         }
 
+        //清除场景
         public void ClearScene()
         {
             foreach (var projectile in _projectiles)
