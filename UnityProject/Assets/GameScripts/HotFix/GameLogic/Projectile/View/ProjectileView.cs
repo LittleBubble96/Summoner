@@ -46,6 +46,14 @@ namespace GameLogic.Game
             }
         }
 
+        public void PlayProjectileHit(ProjectileInstanceId instanceId, RaycastHit hit)
+        {
+            if (_projectileViews.TryGetValue(instanceId,out var projectItemView))
+            {
+                projectItemView.PlayHitEffect(hit);
+            }
+        }
+
         public void ClearScene()
         {
             foreach (var projectItemView in _projectileViews)

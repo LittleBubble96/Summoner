@@ -2,10 +2,13 @@
 
 namespace GameLogic.Game
 {
-    public class MainCharacter
+    public class MainCharacter : CharacterElement
     {
-        public float Speed = 4f;
         public float AngleSpeed = 720f; // degrees per second
-        public Vector3 Position;
+        protected override void OnInit()
+        {
+            base.OnInit();
+            SetMoveSpeed(4f);
+        }
     }
 }

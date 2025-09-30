@@ -2,17 +2,18 @@
 using GameBase;
 using GameFramework;
 using GameFramework.Event;
+using UnityEngine;
 using UnityGameFramework.Runtime;
 
 namespace GameLogic.Game
 {
     public partial class CharacterManager : BaseLogicSys<CharacterManager>
     {
-        
-        public List<CharacterElement> CharacterList = new List<CharacterElement>();
+
+        public Dictionary<ActorInstanceId, CharacterElement> CharacterDic = new Dictionary<ActorInstanceId, CharacterElement>();
         private ICharacterView m_CharacterView;
         public ICharacterView CharacterView => m_CharacterView;
-        public MainCharacter MainChar { get; private set; }
+        public ActorInstanceId MainActorId { get; private set; }
 
         public override bool OnInit()
         {
@@ -25,18 +26,38 @@ namespace GameLogic.Game
             CreateMainCharacter();
         }
 
-        public void CreateCharacter(int hexIndex)
+        public void CreateCharacter(Vector3 position, CharacterFactionType factionType)
         {
             CharacterElement element = new CharacterElement();
+            element.ActorInstanceId = ActorInstanceId.NewId();
+            element.FactionType = factionType;
+            element.Position = position;
             element.Init();
-            CharacterList.Add(element);
+            CharacterDic.Add(element.ActorInstanceId,element);
             XYEvent.GEvent.Fire(this,EventDefine.CreateCharacterEventName, element);
         }
 
         private void CreateMainCharacter()
         {
-            MainChar = new MainCharacter();
-            CharacterView?.OnCreateMainCharacter(MainChar);
+            MainCharacter mainChar = new MainCharacter();
+            mainChar.FactionType = CharacterFactionType.Player;
+            mainChar.ActorInstanceId = ActorInstanceId.NewId();
+            MainActorId = mainChar.ActorInstanceId;
+            mainChar.Init();
+            CharacterView?.OnCreateMainCharacter(mainChar);
+            CharacterDic.Add(MainActorId,mainChar);
+        }
+        
+        /// <summary>
+        /// 获取角色数据
+        /// </summary>
+        public CharacterElement GetCharacter(ActorInstanceId actorInstanceId)
+        {
+            if (CharacterDic.TryGetValue(actorInstanceId, out var character))
+            {
+                return character;
+            }
+            return null;
         }
 
         public void Inject(ICharacterView view)

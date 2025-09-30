@@ -52,6 +52,11 @@ namespace GameLogic.Game
             }
         }
 
+        public Projectile GetProjectile(ProjectileInstanceId projectileInstanceId)
+        {
+            return _projectiles.TryGetValue(projectileInstanceId, out var projectile) ? projectile : null;
+        }
+
         public override void OnUpdate()
         {
             base.OnUpdate();
@@ -83,6 +88,34 @@ namespace GameLogic.Game
                     _projectileView.RealDestroyProjectile(id);
                 }
             }
+        }
+
+        /// <summary>
+        /// 该角色是否可以被击中
+        /// </summary>
+        public bool CanHitCharacter(ProjectileInstanceId projectileInstanceId, CharacterElement characterElement)
+        {
+            if (characterElement == null || characterElement.IsDead())
+            {
+                return false;
+            }
+            Projectile projectile = GetProjectile(projectileInstanceId);
+            if (projectile == null)
+            {
+                return false;
+            }
+            CharacterElement owner = CharacterManager.Instance.GetCharacter(projectile.ProjectileData.OwnerId);
+            if (owner == null)
+            {
+                return false;
+            }
+            FactionRelationType relation = CharacterManager.Instance.GetRelation(characterElement, owner);
+            return relation == FactionRelationType.Hostile;
+        }
+
+        public void HitProjectile(ProjectileInstanceId projectileInstanceId ,RaycastHit hitInfo , CharacterElement characterElement)
+        {
+            
         }
 
         //清除场景

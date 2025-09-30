@@ -27,37 +27,40 @@ namespace GameLogic.Game
             {
                 float minDis = float.MaxValue;
                 int hitIndex = -1;
+                CharacterBaseView characterBaseView = null;
                 for (int i = 0; i < raycastResults.Length; i++)
                 {
-                    CharacterBaseView characterBaseView = raycastResults[i].transform.GetComponentInParent<CharacterBaseView>();
-                    // if (characterBaseView == null || CharacterManager.Instance.GetRelation(_projectile.ProjectileData.))
-                    // {
-                    //     
-                    // }
+                    CharacterBaseView characterView = raycastResults[i].transform.GetComponentInParent<CharacterBaseView>();
+                    if (characterView)
+                    {
+                        bool canHit = ProjectileManager.Instance.CanHitCharacter(_projectile.InstanceId, characterView.CharacterElement);
+                        if (!canHit)
+                        {
+                            continue;
+                        }
+                    }
                     float dis = Vector3.Distance(startPos, raycastResults[i].point);
                     if (dis < minDis)
                     {
                         minDis = dis;
                         hitIndex = i;
+                        characterBaseView = characterView;
                     }
                 }
 
                 if (hitIndex != -1)
                 {
-                    RaycastHit hitInfo = raycastResults[hitIndex];
-                    if (hitInfo.transform.GetComponentInParent<CharacterBaseView>())
-                    {
-                        
-                    }
+                    ProjectileManager.Instance.HitProjectile(_projectile.InstanceId,raycastResults[hitIndex],characterBaseView ? characterBaseView.CharacterElement:null);
                 }
-                // //命中
-                // _projectile.OnHit(hitInfo.point, hitInfo.normal);
-                // //播放命中特效
-                // EffectManager.Instance.PlayFixedEffect(_projectile.ProjectileConfig.HitEffect,
-                //     hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
             }
             transform.position = _projectile.CurrentPosition;
             transform.forward = _projectile.CurrentDirection;
+        }
+
+        public void PlayHitEffect(RaycastHit hitInfo)
+        {
+            EffectManager.Instance.PlayFixedEffect(_projectile.ProjectileConfig.HitEffect,
+                hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
         }
     }
 }

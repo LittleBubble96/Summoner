@@ -12,6 +12,8 @@ namespace GameLogic.Game
         void DestroyProjectile(ProjectileInstanceId instanceId);
         //实际销毁子弹 立即销毁
         void RealDestroyProjectile(ProjectileInstanceId instanceId);
+        //播放击中特效
+        void PlayProjectileHit(ProjectileInstanceId instanceId,RaycastHit hit);
 
         void ClearScene();
     }

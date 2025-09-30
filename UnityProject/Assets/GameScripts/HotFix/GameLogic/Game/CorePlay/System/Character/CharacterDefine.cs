@@ -23,4 +23,34 @@
         Friendly, //友好不可 攻击
         Neutral , // 中立
     }
+
+    public enum CharacterAttributeType
+    {
+        //物理基础攻击
+        PhysicalBasicAttack,
+        //魔法基础攻击
+        MagicBasicAttack,
+        //物理防御
+        PhysicalDefense,
+        //魔法防御
+        MagicDefense,
+        //生命值
+        HealthPoint,
+        //生命值上限
+        HealthPointMax,
+        //法力值
+        ManaPoint,
+        //法力值上限
+        ManaPointMax,
+        //移动速度
+        MoveSpeed,
+        //暴击率
+        CriticalRate,
+        //暴击伤害
+        CriticalDamage,
+        //生命偷取
+        LifeSteal,
+        //攻击速度
+        AttackSpeed,
+    }
 }

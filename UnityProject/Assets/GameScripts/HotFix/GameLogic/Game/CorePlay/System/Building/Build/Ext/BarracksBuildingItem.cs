@@ -19,7 +19,7 @@
                 if (_spawnTimeCount <= 0)
                 {
                     _spawnTimeCount = _spawnTimer;
-                    CharacterManager.Instance.CreateCharacter(HexIndex);
+                    // CharacterManager.Instance.CreateCharacter(HexIndex);
                 }
             }
         }

@@ -36,5 +36,21 @@ namespace GameLogic.Game
             }
             return FactionRelationType.Neutral;
         }
+
+        public FactionRelationType GetRelation(CharacterElement from, CharacterElement to)
+        {
+            if (from == null || to == null)
+            {
+                return FactionRelationType.Friendly;
+            }
+            return GetRelation(from.FactionType, to.FactionType);
+        }
+        
+        public FactionRelationType GetRelation(ActorInstanceId from, ActorInstanceId to)
+        {
+            CharacterElement fromCharacter = GetCharacter(from);
+            CharacterElement toCharacter = GetCharacter(to);
+            return GetRelation(fromCharacter, toCharacter);
+        }
     }
 }
