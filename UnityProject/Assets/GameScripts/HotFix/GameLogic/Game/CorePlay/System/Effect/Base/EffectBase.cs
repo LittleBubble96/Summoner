@@ -14,12 +14,12 @@ namespace GameLogic.Game
         protected float _autoRecycleTime;
         protected float _currentLifeTime;
         protected bool _isActive;
-        protected System.Action<EffectBase> _onRecycleCallback;
+        protected System.Action<EffectInstanceId> _onRecycleCallback;
 
         /// <summary>
         /// 初始化特效
         /// </summary>
-        public virtual void Initialize(float autoRecycleTime, System.Action<EffectBase> onRecycleCallback)
+        public virtual void Initialize(float autoRecycleTime, System.Action<EffectInstanceId> onRecycleCallback)
         {
             // 为每个实例分配唯一ID
             InstanceId = EffectInstanceId.NewId();
@@ -54,7 +54,7 @@ namespace GameLogic.Game
 
             _isActive = false;
             gameObject.SetActive(false);
-            _onRecycleCallback?.Invoke(this);
+            _onRecycleCallback?.Invoke(InstanceId);
         }
     }
 

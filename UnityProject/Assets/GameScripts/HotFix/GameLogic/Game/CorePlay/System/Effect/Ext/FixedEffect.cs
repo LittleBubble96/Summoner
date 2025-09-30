@@ -8,7 +8,7 @@ namespace GameLogic.Game
         /// 初始化固定特效
         /// </summary>
         public void Initialize(Vector3 position, Quaternion rotation, Transform parent, 
-            float autoRecycleTime, System.Action<EffectBase> onRecycleCallback)
+            float autoRecycleTime, System.Action<EffectInstanceId> onRecycleCallback)
         {
             // 设置位置和旋转
             transform.position = position;

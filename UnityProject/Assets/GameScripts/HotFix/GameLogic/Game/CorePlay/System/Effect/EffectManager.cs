@@ -17,6 +17,7 @@ namespace GameLogic.Game.Effect
         // 所有活跃的特效（通过实例ID索引）
         private Dictionary<EffectInstanceId, EffectBase>
             _activeEffects = new Dictionary<EffectInstanceId, EffectBase>();
+        private Queue<EffectInstanceId> _recycleQueue = new Queue<EffectInstanceId>();
 
         private void Awake()
         {
@@ -39,6 +40,21 @@ namespace GameLogic.Game.Effect
             {
                 effect.OnUpdate(deltaTime);
             }
+            
+        }
+
+        private void ProcessRecycleEffect()
+        {
+            while (_recycleQueue.Count > 0)
+            {
+                EffectBase effectBase = GetEffectById(_recycleQueue.Dequeue());
+                if (effectBase != null)
+                {
+                    effectBase.Recycle();
+                    OnEffectRecycle(effectBase);
+                }
+                
+            }
         }
 
         /// <summary>
@@ -58,7 +74,7 @@ namespace GameLogic.Game.Effect
             FixedEffect effect = GetOrCreateEffect<FixedEffect>(effectPrefab);
 
             // 初始化特效
-            effect.Initialize(position, rotation, parent, autoRecycleTime, OnEffectRecycle);
+            effect.Initialize(position, rotation, parent, autoRecycleTime, RecycleEffect);
 
             // 添加到活跃特效字典
             _activeEffects[effect.InstanceId] = effect;
@@ -89,7 +105,7 @@ namespace GameLogic.Game.Effect
             FollowEffect effect = GetOrCreateEffect<FollowEffect>(effectPrefab);
 
             // 初始化特效
-            effect.Initialize(target, offset, rotation, autoRecycleTime, OnEffectRecycle);
+            effect.Initialize(target, offset, rotation, autoRecycleTime, RecycleEffect);
 
             // 添加到活跃特效字典
             _activeEffects[effect.InstanceId] = effect;
@@ -102,14 +118,7 @@ namespace GameLogic.Game.Effect
         /// </summary>
         public void RecycleEffect(EffectInstanceId instanceId)
         {
-            if (_activeEffects.TryGetValue(instanceId, out var effect))
-            {
-                effect.Recycle();
-            }
-            else
-            {
-                Debug.LogWarning($"Effect with instance ID {instanceId.Id} not found!");
-            }
+            _recycleQueue.Enqueue(instanceId);
         }
 
         /// <summary>

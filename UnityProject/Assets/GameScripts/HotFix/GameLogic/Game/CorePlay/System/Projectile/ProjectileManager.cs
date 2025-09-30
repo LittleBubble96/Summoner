@@ -115,7 +115,12 @@ namespace GameLogic.Game
 
         public void HitProjectile(ProjectileInstanceId projectileInstanceId ,RaycastHit hitInfo , CharacterElement characterElement)
         {
-            
+            _projectiles.TryGetValue(projectileInstanceId, out var projectile);
+            if (projectile == null)
+            {
+                return;
+            }
+            _projectileView?.PlayProjectileHit(projectileInstanceId,hitInfo);
         }
 
         //清除场景

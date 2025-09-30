@@ -11,7 +11,7 @@ namespace GameLogic.Game
         /// 初始化跟随特效
         /// </summary>
         public void Initialize(Transform target, Vector3 offset, Quaternion rotation,
-            float autoRecycleTime, System.Action<EffectBase> onRecycleCallback)
+            float autoRecycleTime, System.Action<EffectInstanceId> onRecycleCallback)
         {
             _target = target;
             _offset = offset;
