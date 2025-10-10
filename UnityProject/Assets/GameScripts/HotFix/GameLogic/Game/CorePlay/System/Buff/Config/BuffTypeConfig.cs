@@ -5,8 +5,7 @@ namespace GameLogic.Game
 {
     public class BuffTypeConfig
     {
-        public virtual Dictionary<EBuffType,Func<IBuffItem>> BuffItemFactoryDic { get; } = new Dictionary<EBuffType, Func<IBuffItem>>();
-        public virtual Dictionary<EBuffType,Func<IBuffItemView>> BuffItemViewFactoryDic { get; } = new Dictionary<EBuffType, Func<IBuffItemView>>();
+        public virtual Dictionary<EBuffType,Func<BuffItemBase>> BuffItemFactoryDic { get; } = new Dictionary<EBuffType, Func<BuffItemBase>>();
     }
 
     public enum EBuffType

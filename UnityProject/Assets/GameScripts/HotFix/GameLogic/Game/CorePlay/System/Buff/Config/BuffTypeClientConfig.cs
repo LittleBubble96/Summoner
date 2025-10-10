@@ -6,13 +6,13 @@ namespace GameLogic.Game
 {
     public class BuffTypeClientConfig : BuffTypeConfig
     {
-        public override Dictionary<EBuffType, Func<IBuffItem>> BuffItemFactoryDic =>
-            new Dictionary<EBuffType, Func<IBuffItem>>()
+        public override Dictionary<EBuffType, Func<BuffItemBase>> BuffItemFactoryDic =>
+            new Dictionary<EBuffType, Func<BuffItemBase>>()
             {
-                { EBuffType.BaseDamage, ReferencePool.Acquire<BaseDamageBuff> },
-                { EBuffType.Fire, ReferencePool.Acquire<FireBuffItem> },
-                { EBuffType.Freeze, ReferencePool.Acquire<FreezeBuffItem> },
-                { EBuffType.Stun, ReferencePool.Acquire<StunBuffItem> }
+                { EBuffType.BaseDamage, ReferencePool.Acquire<BaseDamageBuffView> },
+                { EBuffType.Fire, ReferencePool.Acquire<FireBuffViewItem> },
+                { EBuffType.Freeze, ReferencePool.Acquire<FreezeBuffViewItem> },
+                { EBuffType.Stun, ReferencePool.Acquire<StunBuffViewItem> }
             };
     }
 }
