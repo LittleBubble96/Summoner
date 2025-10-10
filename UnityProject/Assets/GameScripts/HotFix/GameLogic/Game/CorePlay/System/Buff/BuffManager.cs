@@ -16,12 +16,12 @@ namespace GameLogic.Game
             _config = config;
         }
 
-        public void AddBuff(EBuffType buffType, ActorInstanceId actorId)
+        public void AddBuff(EBuffType buffType,ActorInstanceId belongToActor , ActorInstanceId attachToActor , CommonArgs args)
         {
-            if (!_actorAttachBuffs.TryGetValue(actorId,out var actorAttachBuff))
+            if (!_actorAttachBuffs.TryGetValue(attachToActor,out var actorAttachBuff))
             {
                 actorAttachBuff = new List<BuffInstanceId>();
-                _actorAttachBuffs.Add(actorId,actorAttachBuff);
+                _actorAttachBuffs.Add(attachToActor,actorAttachBuff);
             }
 
             int existingBuffIndex = actorAttachBuff.FindIndex((id) =>
@@ -35,7 +35,7 @@ namespace GameLogic.Game
             if (existingBuffIndex >= 0)
             {
                 BuffItemBase buffItem = _buffItems[actorAttachBuff[existingBuffIndex]];
-                buffItem.RefreshBuff();
+                buffItem.RefreshBuff(args);
             }
             else
             {
@@ -43,7 +43,7 @@ namespace GameLogic.Game
                 BuffInstanceId buffId = BuffInstanceId.NewId();
                 _buffItems.Add(buffId,buffItem);
                 actorAttachBuff.Add(buffId);
-                buffItem.InitBuff(null);
+                buffItem.InitBuff(null,belongToActor,attachToActor,args);
             }
         }
 

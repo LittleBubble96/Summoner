@@ -4,31 +4,32 @@ using UnityEngine;
 
 namespace GameLogic.Game
 {
-    public class MainCharacterView : MonoBehaviour
+    public class MainCharacterView : CharacterBaseView
     {
         [SerializeField] private Animator m_animator;
         [SerializeField] private CharacterController m_characterController;
         
-        public MainCharacter Character { get; set; }
+        public MainCharacter MainCharacter { get; set; }
         
         private Vector3 m_inputDownPos;
         private Vector3 m_inputCurrentPos;
         private static readonly int IsRunningAnimHash = Animator.StringToHash("IsRunning");
         private bool IsRunning = false;
-        
-        public void Init(MainCharacter character)
+
+        protected override void OnInitCharacter()
         {
-            Character = character;
+            base.OnInitCharacter();
+            MainCharacter = CharacterElement as MainCharacter;
         }
 
         private void Update()
         {
-            if (Character == null)
+            if (MainCharacter == null)
             {
                 return;
             }
-            float speed = Character.GetMoveSpeed();
-            float angleSpeed = Character.AngleSpeed;
+            float speed = MainCharacter.MoveSpeed;
+            float angleSpeed = MainCharacter.AngleSpeed;
             
             // 获取输入
             if (Input.GetMouseButtonDown(0))
@@ -58,7 +59,7 @@ namespace GameLogic.Game
                     
                     m_characterController.Move(moveDir * speed * Time.deltaTime);
                     // 更新位置
-                    Character.Position = transform.position;
+                    MainCharacter.Position = transform.position;
                     // 播放行走动画
                     m_animator.SetBool(IsRunningAnimHash, true);
                 }

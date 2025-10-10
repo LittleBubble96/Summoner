@@ -24,6 +24,15 @@
         Neutral , // 中立
     }
 
+    public enum DamageSourceType
+    {
+        None = 0,
+        PhysicalAttack = 1 << 0, //物理攻击
+        MagicAttack = 1 << 1, //魔法攻击
+        TrueAttack = 1 << 2, //真实伤害
+        Heal = 1 << 3, //治疗
+    }
+
     public enum CharacterAttributeType
     {
         //物理基础攻击

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace GameLogic.Game
 {
-    public partial class CharacterElement
+    public partial class CharacterElement : IReference
     {
         public ActorInstanceId ActorInstanceId { get; set; }
         public Vector3 Position;
@@ -24,7 +24,15 @@ namespace GameLogic.Game
 
         public bool IsDead()
         {
-            return GetHp() <= 0;
+            return Hp <= 0;
+        }
+
+        public void Clear()
+        {
+            Position = Vector3.zero;
+            FactionType = CharacterFactionType.Player;
+            AttributeDic.Clear();
+            OnAttributeChanged = null;
         }
     }
 

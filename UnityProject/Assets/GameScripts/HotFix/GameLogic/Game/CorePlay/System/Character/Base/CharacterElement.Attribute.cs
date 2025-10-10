@@ -1,16 +1,16 @@
-﻿using GameFramework;
+﻿using System;
+using GameFramework;
 
 namespace GameLogic.Game
 {
     public partial class CharacterElement
     {
+        public Action<CommonArgs> OnAttributeChanged { get; set; }
+
         #region 移动速度
 
-        public float GetMoveSpeed()
-        {
-            return GetFloatAttribute_Internal(CharacterAttributeType.MoveSpeed);
-        }
-        
+        public float MoveSpeed => GetFloatAttribute_Internal(CharacterAttributeType.MoveSpeed);
+
         public void SetMoveSpeed(float value)
         {
             SetFloatAttribute_Internal(CharacterAttributeType.MoveSpeed,value);
@@ -20,19 +20,29 @@ namespace GameLogic.Game
 
         #region 血量
 
-        public float GetHp()
-        {
-            return GetIntAttribute_Internal(CharacterAttributeType.HealthPoint);
-        }
+        public int Hp =>  GetIntAttribute_Internal(CharacterAttributeType.HealthPoint);
 
-        public void SetHp(int hp)
+        public void SetHp(int hp,DamageSourceType damageSourceType)
         {
             SetIntAttribute_Internal(CharacterAttributeType.HealthPoint ,hp);
+            OnAttributeChanged?.Invoke(CommonArgs.CreateTwoArgs(CharacterAttributeType.HealthPoint,damageSourceType));
+        }
+
+        public void IncreaseHp(int value,DamageSourceType damageSourceType)
+        {
+            SetHp(Hp < value ? 0 : Hp - value,damageSourceType);
         }
 
         #endregion
+
+        #region 物理攻击
+
+        public int PhysicalAttack => GetIntAttribute_Internal(CharacterAttributeType.PhysicalBasicAttack); 
+      
+
+        #endregion
         
-        private float GetIntAttribute_Internal(CharacterAttributeType attributeType)
+        private int GetIntAttribute_Internal(CharacterAttributeType attributeType)
         {
             if (AttributeDic.TryGetValue(attributeType, out var attribute))
             {

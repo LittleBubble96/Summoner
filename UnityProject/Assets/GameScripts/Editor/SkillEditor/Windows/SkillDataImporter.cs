@@ -51,7 +51,6 @@ public static class SkillDataImporter
                     AnimationParameterClip animClip = ScriptableObject.CreateInstance<AnimationParameterClip>();
                     animClip.template.animationClip = clip;
                     animClip.template.speed = clipData.speed;
-                    animClip.template.weight = clipData.weight;
                     animClip.template.loop = clipData.loop;
                     TimelineClip timelineClip = animTrack.CreateClip<AnimationParameterClip>();
                     timelineClip.asset = animClip;

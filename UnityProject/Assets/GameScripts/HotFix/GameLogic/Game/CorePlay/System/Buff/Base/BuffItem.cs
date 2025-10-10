@@ -28,9 +28,9 @@ namespace GameLogic.Game
         }
 
         //初始化buff
-        public abstract void InitBuff(BuffConfig config,ActorInstanceId belongToActor , ActorInstanceId attachToActor);
+        public abstract void InitBuff(BuffConfig config,ActorInstanceId belongToActor , ActorInstanceId attachToActor, CommonArgs args);
         //重复添加buff
-        public abstract void RefreshBuff();
+        public abstract void RefreshBuff(CommonArgs args);
         //执行buff
         protected abstract void OnExecuteBuff();
         //清理离开buff
@@ -59,12 +59,12 @@ namespace GameLogic.Game
 
         #region 接口
         
-        public override void InitBuff(BuffConfig config ,ActorInstanceId belongToActor , ActorInstanceId attachToActor)
+        public override void InitBuff(BuffConfig config ,ActorInstanceId belongToActor , ActorInstanceId attachToActor, CommonArgs args)
         {
             Config = config;
         }
 
-        public override void RefreshBuff()
+        public override void RefreshBuff(CommonArgs args)
         {
             
         }

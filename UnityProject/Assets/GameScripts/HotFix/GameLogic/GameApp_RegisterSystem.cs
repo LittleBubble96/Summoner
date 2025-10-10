@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using GameBase;
 using GameLogic;
-using GameFramework;
 using GameLogic.Game;
 using UnityGameFramework.Runtime;
 
@@ -33,6 +32,9 @@ public partial class GameApp
         AddLogicSys(UISystem.Instance);
         AddLogicSys(BuildingSystem.Instance);
         AddLogicSys(CharacterManager.Instance);
+        AddLogicSys(SkillManager.Instance);
+        AddLogicSys(BuffManager.Instance);
+        AddLogicSys(EffectManager.Instance);
     }
 
     /// <summary>

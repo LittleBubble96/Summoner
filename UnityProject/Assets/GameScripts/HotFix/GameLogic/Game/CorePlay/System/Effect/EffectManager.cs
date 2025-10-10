@@ -1,38 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
+using GameBase;
 using UnityEngine;
 
-namespace GameLogic.Game.Effect
+namespace GameLogic.Game
 {
     /// <summary>
     /// 特效管理器
     /// 管理所有特效实例，通过实例ID进行操作
     /// </summary>
-    public class EffectManager : MonoBehaviour
+    public class EffectManager : BaseLogicSys<EffectManager>
     {
-        // 单例实例
-        public static EffectManager Instance { get; private set; }
-        
+        private Transform _parentTf;
+        private Transform ParentTf
+        {
+            get
+            {
+                if (_parentTf == null)
+                {
+                    _parentTf = new GameObject("EffectManager").transform;
+                    _parentTf.SetParent(GameModule.Base.transform);
+                }
+                return _parentTf;
+            }
+        }
 
         // 所有活跃的特效（通过实例ID索引）
         private Dictionary<EffectInstanceId, EffectBase>
             _activeEffects = new Dictionary<EffectInstanceId, EffectBase>();
         private Queue<EffectInstanceId> _recycleQueue = new Queue<EffectInstanceId>();
 
-        private void Awake()
-        {
-            if (Instance == null)
-            {
-                Instance = this;
-                DontDestroyOnLoad(gameObject);
-            }
-            else
-            {
-                Destroy(gameObject);
-            }
-        }
-
-        private void Update()
+        public override void OnUpdate()
         {
             // 遍历所有活跃特效并更新
             float deltaTime = Time.deltaTime;
@@ -40,7 +38,6 @@ namespace GameLogic.Game.Effect
             {
                 effect.OnUpdate(deltaTime);
             }
-            
         }
 
         private void ProcessRecycleEffect()
@@ -53,7 +50,6 @@ namespace GameLogic.Game.Effect
                     effectBase.Recycle();
                     OnEffectRecycle(effectBase);
                 }
-                
             }
         }
 
@@ -137,7 +133,7 @@ namespace GameLogic.Game.Effect
         {
             // 池中没有可用特效，创建新的
             GameObject effectObj = PoolManager.Instance.GetGameObject(prefab);
-            effectObj.transform.SetParent(transform); // 所有特效作为管理器的子对象
+            effectObj.transform.SetParent(ParentTf); // 所有特效作为管理器的子对象
             effectObj.SetActive(false);
 
             T newEffect = effectObj.GetComponent<T>();

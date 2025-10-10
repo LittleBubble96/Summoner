@@ -39,7 +39,7 @@ namespace GameLogic.Game
 
         private void CreateMainCharacter()
         {
-            MainCharacter mainChar = new MainCharacter();
+            MainCharacter mainChar = ReferencePool.Acquire<MainCharacter>();//TODO 死亡需要销毁
             mainChar.FactionType = CharacterFactionType.Player;
             mainChar.ActorInstanceId = ActorInstanceId.NewId();
             MainActorId = mainChar.ActorInstanceId;

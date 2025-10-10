@@ -1,5 +1,4 @@
-﻿using GameLogic.Game.Effect;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace GameLogic.Game
 {

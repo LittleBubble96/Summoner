@@ -4,12 +4,13 @@ using UnityEditor.Timeline;
 using UnityEngine.Timeline;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using GameLogic.Game;
 using UnityEngine.Playables;
 
 public class SkillEditorWindow : EditorWindow
 {
     private TimelineAsset timelineAsset;
-    private string skillName = "New Skill";
+    private int skillName = 1;
     private PlayableDirector playableDirector;
 
     [MenuItem("Window/技能编辑器")]
@@ -22,7 +23,7 @@ public class SkillEditorWindow : EditorWindow
     {
         GUILayout.Label("技能设置", EditorStyles.boldLabel);
         
-        skillName = EditorGUILayout.TextField("技能名", skillName);
+        skillName = EditorGUILayout.IntField("技能名", skillName);
         timelineAsset = EditorGUILayout.ObjectField("Timeline Asset", timelineAsset, typeof(TimelineAsset), false) as TimelineAsset;
         playableDirector = EditorGUILayout.ObjectField("Playable Director", playableDirector, typeof(PlayableDirector), true) as PlayableDirector;
 
@@ -102,7 +103,6 @@ public class SkillEditorWindow : EditorWindow
     private void ExportSkillData()
     {
         SkillData skillData = new SkillData();
-        skillData.skillName = skillName;
         skillData.duration = (float)timelineAsset.duration;
 
         // 收集所有轨道数据
@@ -123,7 +123,6 @@ public class SkillEditorWindow : EditorWindow
                         clipData.startTime = (float)clip.start;
                         clipData.duration = (float)clip.duration;
                         clipData.speed = animClip.template.speed;
-                        clipData.weight = animClip.template.weight;
                         clipData.loop = animClip.template.loop;
                         
                         animData.clips.Add(clipData);
@@ -156,7 +155,7 @@ public class SkillEditorWindow : EditorWindow
                     }
                 }
                 
-                skillData.effectTracks.Add(effectData);
+                // skillData.effectTracks.Add(effectData);
             }
             else if (track is BuffTrack buffTrack)
             {
@@ -172,14 +171,12 @@ public class SkillEditorWindow : EditorWindow
                         clipData.buffId = buffClip.template.buffId;
                         clipData.startTime = (float)clip.start;
                         clipData.duration = (float)clip.duration;
-                        clipData.parameters = buffClip.template.parameters;
-                        clipData.isPermanent = buffClip.template.isPermanent;
                         
                         buffData.buffs.Add(clipData);
                     }
                 }
                 
-                skillData.buffTracks.Add(buffData);
+                // skillData.buffTracks.Add(buffData);
             }
             else if (track is SummonTrack summonTrack)
             {
@@ -200,22 +197,31 @@ public class SkillEditorWindow : EditorWindow
                     }
                 }
                 
-                skillData.summonTracks.Add(summonData);
-            }
-        }
-
-        // 导出为二进制
-        string exportPath = EditorUtility.SaveFilePanel("Export Skill Data", Application.dataPath, skillName, "skill");
-        if (!string.IsNullOrEmpty(exportPath))
-        {
-            BinaryFormatter formatter = new BinaryFormatter();
-            using (FileStream stream = new FileStream(exportPath, FileMode.Create))
-            {
-                formatter.Serialize(stream, skillData);
+                // skillData.summonTracks.Add(summonData);
             }
             
-            Debug.Log("Skill data exported successfully to: " + exportPath);
-            AssetDatabase.Refresh();
+            else if (track is ProjectileParameterTrack projectileParameterTrack)
+            {
+                ProjectileTrackData projectileTrackData = new ProjectileTrackData();
+                projectileTrackData.trackName = track.name;
+                
+                foreach (var clip in track.GetClips())
+                {
+                    ProjectileParameterClip projectileParameterClip = clip.asset as ProjectileParameterClip;
+                    if (projectileParameterClip != null)
+                    {
+                        ProjectileClipData clipData = new ProjectileClipData();
+                        clipData.startTime = (float)clip.start;
+                        clipData.duration = (float)clip.duration;
+                        clipData.position = projectileParameterClip.template.position;
+                        clipData.rotation = projectileParameterClip.template.rotation;
+                        projectileTrackData.ProjectileClipDatas.Add(clipData);
+                    }
+                }
+                skillData.projectileTracks.Add(projectileTrackData);
+            }
         }
+        SkillDataParse.Write(skillName,skillData);
+        AssetDatabase.Refresh();
     }
 }
