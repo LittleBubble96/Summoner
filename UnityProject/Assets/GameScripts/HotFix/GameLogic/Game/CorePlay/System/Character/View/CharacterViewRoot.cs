@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using GameFramework.Event;
 using UnityEngine;
 using UnityGameFramework.Runtime;
@@ -7,44 +8,57 @@ namespace GameLogic.Game
 {
     public class CharacterViewRoot : MonoBehaviour ,ICharacterView
     {
+        public Dictionary<ActorInstanceId,CharacterBaseView> CharacterViewDic = new Dictionary<ActorInstanceId, CharacterBaseView>();
+        private Queue<ActorInstanceId> _destroyQueue = new Queue<ActorInstanceId>();
         private void Awake()
         {
             CharacterManager.Instance.Inject(this);
         }
-        
-        private void OnEnable()
-        {
-            XYEvent.GEvent.Subscribe(EventDefine.CreateCharacterEventName,OnCreateCharacter);
-        }
-
-        private void OnDisable()
-        {
-            XYEvent.GEvent.Unsubscribe(EventDefine.CreateCharacterEventName,OnCreateCharacter);
-        }
-        
-        public void OnCreateCharacter(object sender,GameEventArgs e)
-        {
-            if (e == null)
-            {
-                Log.Error("CharacterViewRoot OnCreateCharacter error");
-                return;
-            }
-
-            if (e is GameEventCustomOneParam<CharacterElement> eventArgs)
-            {
-                GameModule.Resource.LoadGameObject("Monster_Batty_A");
-            }
-        }
 
         #region 接口
 
+        public void OnUpdate(float dt)
+        {
+            foreach (var character in CharacterViewDic)
+            {
+                character.Value.DoUpdate(dt);
+            }
+            //处理角色销毁逻辑
+            ProcessDestroyCharacter();
+        }
+
+        public void OnDestroyCharacter(ActorInstanceId actorInstanceId)
+        {
+            _destroyQueue.Enqueue(actorInstanceId);
+        }
+
         public void OnCreateMainCharacter(MainCharacter character)
         {
-            GameObject role = GameModule.Resource.LoadGameObject(CharacterDefine.MainCharacterAsset,transform);
+            GameObject role = PoolManager.Instance.GetGameObject(CharacterDefine.MainCharacterAsset,transform);
             MainCharacterView view = role.GetOrAddComponent<MainCharacterView>();
             view.Init(character);
         }
 
+        public void OnCreateAICharacter(AICharacter character)
+        {
+            GameObject ai = PoolManager.Instance.GetGameObject(character.RoleConfig.ResPath,transform);
+            ai.transform.position = character.Position;
+            ai.transform.rotation = Quaternion.Euler(character.Rotation);
+        }
+
         #endregion
+
+        private void ProcessDestroyCharacter()
+        {
+            while (_destroyQueue.Count > 0)
+            {
+                ActorInstanceId actorInstanceId = _destroyQueue.Dequeue();
+                if (CharacterViewDic.TryGetValue(actorInstanceId,out CharacterBaseView view))
+                {
+                    CharacterViewDic.Remove(actorInstanceId);
+                    PoolManager.Instance.PushObject(view);
+                }
+            }
+        }
     }
 }

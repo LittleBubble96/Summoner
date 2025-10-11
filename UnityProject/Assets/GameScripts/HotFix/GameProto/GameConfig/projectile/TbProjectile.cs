@@ -19,13 +19,13 @@ public partial class TbProjectile
     
     public TbProjectile(ByteBuf _buf)
     {
-        int n = _buf.ReadSize();
-        _dataMap = new System.Collections.Generic.Dictionary<int, projectile.ProjectileConfig>(n);
-        _dataList = new System.Collections.Generic.List<projectile.ProjectileConfig>(n);
-        for(int i = n ; i > 0 ; --i)
+        _dataMap = new System.Collections.Generic.Dictionary<int, projectile.ProjectileConfig>();
+        _dataList = new System.Collections.Generic.List<projectile.ProjectileConfig>();
+        
+        for(int n = _buf.ReadSize() ; n > 0 ; --n)
         {
             projectile.ProjectileConfig _v;
-            _v = global::GameConfig.projectile.ProjectileConfig.DeserializeProjectileConfig(_buf);
+            _v = projectile.ProjectileConfig.DeserializeProjectileConfig(_buf);
             _dataList.Add(_v);
             _dataMap.Add(_v.Id, _v);
         }
@@ -34,7 +34,7 @@ public partial class TbProjectile
     public System.Collections.Generic.Dictionary<int, projectile.ProjectileConfig> DataMap => _dataMap;
     public System.Collections.Generic.List<projectile.ProjectileConfig> DataList => _dataList;
 
-    public projectile.ProjectileConfig GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : default;
+    public projectile.ProjectileConfig GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
     public projectile.ProjectileConfig Get(int key) => _dataMap[key];
     public projectile.ProjectileConfig this[int key] => _dataMap[key];
 

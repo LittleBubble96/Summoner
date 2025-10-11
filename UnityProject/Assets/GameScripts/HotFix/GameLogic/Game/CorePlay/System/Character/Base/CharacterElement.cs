@@ -8,16 +8,28 @@ namespace GameLogic.Game
     {
         public ActorInstanceId ActorInstanceId { get; set; }
         public Vector3 Position;
+        public Vector3 Rotation;
         public CharacterFactionType FactionType = CharacterFactionType.Player;
         // 角色属性字典
         public Dictionary<CharacterAttributeType,CharacterAttributeValue> AttributeDic = new Dictionary<CharacterAttributeType, CharacterAttributeValue>();
 
-        public void Init()
+        public void Init(CommonArgs args)
         {
-            OnInit();
+            OnInit(args);
+            OnInitAttribute();
         }
         
-        protected virtual void OnInit()
+        protected virtual void OnInit(CommonArgs args)
+        {
+            
+        }
+
+        protected virtual void OnInitAttribute()
+        {
+            
+        }
+
+        public virtual void DoUpdate(float dt)
         {
             
         }
@@ -27,9 +39,10 @@ namespace GameLogic.Game
             return Hp <= 0;
         }
 
-        public void Clear()
+        public virtual void Clear()
         {
             Position = Vector3.zero;
+            Rotation = Vector3.zero;
             FactionType = CharacterFactionType.Player;
             AttributeDic.Clear();
             OnAttributeChanged = null;

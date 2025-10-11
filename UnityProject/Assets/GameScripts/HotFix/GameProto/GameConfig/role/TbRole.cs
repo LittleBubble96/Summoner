@@ -19,13 +19,13 @@ public partial class TbRole
     
     public TbRole(ByteBuf _buf)
     {
-        int n = _buf.ReadSize();
-        _dataMap = new System.Collections.Generic.Dictionary<int, role.Role>(n);
-        _dataList = new System.Collections.Generic.List<role.Role>(n);
-        for(int i = n ; i > 0 ; --i)
+        _dataMap = new System.Collections.Generic.Dictionary<int, role.Role>();
+        _dataList = new System.Collections.Generic.List<role.Role>();
+        
+        for(int n = _buf.ReadSize() ; n > 0 ; --n)
         {
             role.Role _v;
-            _v = global::GameConfig.role.Role.DeserializeRole(_buf);
+            _v = role.Role.DeserializeRole(_buf);
             _dataList.Add(_v);
             _dataMap.Add(_v.Id, _v);
         }
@@ -34,7 +34,7 @@ public partial class TbRole
     public System.Collections.Generic.Dictionary<int, role.Role> DataMap => _dataMap;
     public System.Collections.Generic.List<role.Role> DataList => _dataList;
 
-    public role.Role GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : default;
+    public role.Role GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
     public role.Role Get(int key) => _dataMap[key];
     public role.Role this[int key] => _dataMap[key];
 

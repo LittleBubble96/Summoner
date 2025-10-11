@@ -22,7 +22,7 @@ namespace GameLogic.Game
             MainCharacter = CharacterElement as MainCharacter;
         }
 
-        private void Update()
+        public override void DoUpdate(float dt)
         {
             if (MainCharacter == null)
             {

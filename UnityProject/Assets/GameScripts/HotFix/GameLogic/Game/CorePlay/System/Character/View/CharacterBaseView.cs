@@ -18,6 +18,11 @@ namespace GameLogic.Game
             
         }
 
+        public virtual void DoUpdate(float dt)
+        {
+            
+        }
+
         protected virtual void OnAttributeChanged(CommonArgs args)
         {
             

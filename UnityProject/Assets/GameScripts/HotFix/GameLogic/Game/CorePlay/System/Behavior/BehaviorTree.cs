@@ -1,4 +1,5 @@
 using GameFramework;
+using GameLogic.Game;
 using UnityEngine;
 
 public class BehaviorTree
@@ -10,6 +11,8 @@ public class BehaviorTree
     private BTGenInfo btGenInfo;
     
     private BtNodeResult btRootRunRes;
+    
+    private AICharacter ownerCharacter;
     
     
     public void Init(BTGenInfo info)
@@ -28,7 +31,7 @@ public class BehaviorTree
             ReferencePool.Release(this.rootNode);
             this.rootNode = null;
         }
-        this.btGenInfo = null;
+        this.btGenInfo = default;
         this.btRootRunRes = BtNodeResult.None;
     }
 
@@ -41,7 +44,12 @@ public class BehaviorTree
     {
         return this.btGenInfo;
     }
-    
+
+    public AICharacter GetOwnerCharacter()
+    {
+        return this.ownerCharacter;
+    }
+
     private BehaviorNode InitTree()
     {
         ConfBTCShape cfgBtData = BTConfigHelper.Instance.GetConfBtcShape(btGenInfo.GetBtGenId());

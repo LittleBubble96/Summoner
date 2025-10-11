@@ -19,8 +19,12 @@ public sealed partial class Role : Luban.BeanBase
         Id = _buf.ReadInt();
         Name = _buf.ReadString();
         Desc = _buf.ReadString();
+        ResPath = _buf.ReadString();
         Cost = _buf.ReadInt();
         Ai = _buf.ReadInt();
+        MoveSpeed = _buf.ReadFloat();
+        MaxHp = _buf.ReadInt();
+        BasePhysicalAttack = _buf.ReadInt();
     }
 
     public static Role DeserializeRole(ByteBuf _buf)
@@ -41,6 +45,10 @@ public sealed partial class Role : Luban.BeanBase
     /// </summary>
     public readonly string Desc;
     /// <summary>
+    /// 角色预制
+    /// </summary>
+    public readonly string ResPath;
+    /// <summary>
     /// 花费
     /// </summary>
     public readonly int Cost;
@@ -48,6 +56,18 @@ public sealed partial class Role : Luban.BeanBase
     /// aiId
     /// </summary>
     public readonly int Ai;
+    /// <summary>
+    /// 移动速度
+    /// </summary>
+    public readonly float MoveSpeed;
+    /// <summary>
+    /// 初始最大血量
+    /// </summary>
+    public readonly int MaxHp;
+    /// <summary>
+    /// 基础物理攻击
+    /// </summary>
+    public readonly int BasePhysicalAttack;
    
     public const int __ID__ = 289769230;
     public override int GetTypeId() => __ID__;
@@ -62,10 +82,15 @@ public sealed partial class Role : Luban.BeanBase
         + "id:" + Id + ","
         + "name:" + Name + ","
         + "desc:" + Desc + ","
+        + "resPath:" + ResPath + ","
         + "cost:" + Cost + ","
         + "ai:" + Ai + ","
+        + "moveSpeed:" + MoveSpeed + ","
+        + "maxHp:" + MaxHp + ","
+        + "basePhysicalAttack:" + BasePhysicalAttack + ","
         + "}";
     }
 }
+
 }
 

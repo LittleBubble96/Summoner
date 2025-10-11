@@ -1,4 +1,4 @@
-public class BTGenInfo
+public struct BTGenInfo
 {
     private int BtGenId;
     

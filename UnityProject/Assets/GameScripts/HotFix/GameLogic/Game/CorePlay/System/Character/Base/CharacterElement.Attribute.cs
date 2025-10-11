@@ -39,7 +39,10 @@ namespace GameLogic.Game
 
         public int PhysicalAttack => GetIntAttribute_Internal(CharacterAttributeType.PhysicalBasicAttack); 
       
-
+        public void SetPhysicalAttack(float value)
+        {
+            SetFloatAttribute_Internal(CharacterAttributeType.PhysicalBasicAttack,value);
+        }
         #endregion
         
         private int GetIntAttribute_Internal(CharacterAttributeType attributeType)

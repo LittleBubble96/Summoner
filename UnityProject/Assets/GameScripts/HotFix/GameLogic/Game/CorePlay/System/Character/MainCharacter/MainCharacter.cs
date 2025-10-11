@@ -5,9 +5,9 @@ namespace GameLogic.Game
     public class MainCharacter : CharacterElement
     {
         public float AngleSpeed = 720f; // degrees per second
-        protected override void OnInit()
+        protected override void OnInit(CommonArgs args)
         {
-            base.OnInit();
+            base.OnInit(args);
             SetMoveSpeed(4f);
         }
     }
