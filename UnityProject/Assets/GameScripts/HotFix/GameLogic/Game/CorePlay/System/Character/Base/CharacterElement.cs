@@ -7,8 +7,8 @@ namespace GameLogic.Game
     public partial class CharacterElement : IReference
     {
         public ActorInstanceId ActorInstanceId { get; set; }
-        public Vector3 Position;
-        public Vector3 Rotation;
+        protected Vector3 Position;
+        protected Vector3 Rotation;
         public CharacterFactionType FactionType = CharacterFactionType.Player;
         // 角色属性字典
         public Dictionary<CharacterAttributeType,CharacterAttributeValue> AttributeDic = new Dictionary<CharacterAttributeType, CharacterAttributeValue>();
@@ -22,6 +22,11 @@ namespace GameLogic.Game
         protected virtual void OnInit(CommonArgs args)
         {
             
+        }
+
+        protected virtual void RegisterActorComponent()
+        {
+            RegisterComponent<TargetComponent>();
         }
 
         protected virtual void OnInitAttribute()
@@ -39,6 +44,26 @@ namespace GameLogic.Game
             return Hp <= 0;
         }
 
+        public void SetPosition(Vector3 targetPos)
+        {
+            Position = targetPos;
+        }
+        
+        public Vector3 GetPosition()
+        {
+            return Position;
+        }
+        
+        public void SetRotation(Vector3 targetRot)
+        {
+            Rotation = targetRot;
+        }
+        
+        public Vector3 GetRotation()
+        {
+            return Rotation;
+        }
+
         public virtual void Clear()
         {
             Position = Vector3.zero;
@@ -46,6 +71,7 @@ namespace GameLogic.Game
             FactionType = CharacterFactionType.Player;
             AttributeDic.Clear();
             OnAttributeChanged = null;
+            ClearComponent();
         }
     }
 

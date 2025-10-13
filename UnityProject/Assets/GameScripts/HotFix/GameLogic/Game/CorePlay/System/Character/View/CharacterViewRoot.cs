@@ -42,8 +42,8 @@ namespace GameLogic.Game
         public void OnCreateAICharacter(AICharacter character)
         {
             GameObject ai = PoolManager.Instance.GetGameObject(character.RoleConfig.ResPath,transform);
-            ai.transform.position = character.Position;
-            ai.transform.rotation = Quaternion.Euler(character.Rotation);
+            ai.transform.position = character.GetPosition();
+            ai.transform.rotation = Quaternion.Euler(character.GetRotation());
         }
 
         #endregion

@@ -46,8 +46,8 @@ namespace GameLogic.Game
             AICharacter ai = new AICharacter();
             ai.ActorInstanceId = ActorInstanceId.NewId();
             ai.FactionType = factionType;
-            ai.Position = position;
-            ai.Rotation = rotation;
+            ai.SetPosition(position);
+            ai.SetRotation(rotation);
             ai.Init(CommonArgs.CreateOneArgs(roleId));
             CharacterView?.OnCreateAICharacter(ai);
             CharacterDic.Add(ai.ActorInstanceId,ai);
@@ -74,6 +74,11 @@ namespace GameLogic.Game
                 return character;
             }
             return null;
+        }
+        
+        public Dictionary<ActorInstanceId,CharacterElement> GetAllCharacter()
+        {
+            return CharacterDic;
         }
 
         /// <summary>

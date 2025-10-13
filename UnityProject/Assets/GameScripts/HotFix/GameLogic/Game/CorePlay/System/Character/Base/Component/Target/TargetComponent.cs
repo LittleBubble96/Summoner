@@ -3,13 +3,10 @@ using GameFramework;
 
 namespace GameLogic.Game
 {
-    public class TargetComponent : IReference
+    public class TargetComponent : ActorComponent
     {
         
-        public void Clear()
-        {
-            
-        }
+        
     }
 
     public enum ETargetType

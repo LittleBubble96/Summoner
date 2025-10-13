@@ -59,7 +59,7 @@ namespace GameLogic.Game
                     
                     m_characterController.Move(moveDir * speed * Time.deltaTime);
                     // 更新位置
-                    MainCharacter.Position = transform.position;
+                    MainCharacter.SetPosition(transform.position);
                     // 播放行走动画
                     m_animator.SetBool(IsRunningAnimHash, true);
                 }

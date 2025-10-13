@@ -64,6 +64,11 @@ namespace GameLogic.Game
         {
             return !left.Equals(right);
         }
+        
+        public bool IsValid()
+        {
+            return Id != 0;
+        }
     }
 
 }

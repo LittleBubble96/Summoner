@@ -13,9 +13,10 @@ namespace GameLogic.Game
             AICharacterData = CharacterElement as AICharacter;
         }
 
-        private void Update()
+        public override void DoUpdate(float dt)
         {
-            
+            base.DoUpdate(dt);
+            CharacterElement.SetPosition(transform.position);
         }
     }
 }

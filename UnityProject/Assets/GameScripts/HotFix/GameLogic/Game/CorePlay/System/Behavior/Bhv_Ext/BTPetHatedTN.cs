@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using GameLogic.Game;
 using UnityEngine;
 
 public class BTPetHatedTN : BTTaskNode
@@ -50,6 +52,27 @@ public class BTPetHatedTN : BTTaskNode
     protected override void OnParseParams(string[] args)
     {
         
+    }
+
+    //查找目标
+    private ActorInstanceId FindTarget()
+    {
+        Dictionary<ActorInstanceId, CharacterElement> allCharacter = CharacterManager.Instance.GetAllCharacter();
+        ActorInstanceId ownerId = behaviorTree.GetOwnerCharacter().ActorInstanceId;
+        float distance = float.MaxValue;
+        ActorInstanceId targetId = default;
+        foreach (var character in allCharacter)
+        {
+            if (CharacterManager.Instance.GetRelation(character.Key,ownerId) == FactionRelationType.Hostile)
+            {
+                float ds = Vector3.Distance(character.Value.GetPosition(), behaviorTree.GetOwnerCharacter().GetPosition());
+                if (ds < distance)
+                {
+                    targetId = character.Key;
+                }
+            }
+        }
+        return targetId;
     }
 
     // private Actor GetTargetActor()
