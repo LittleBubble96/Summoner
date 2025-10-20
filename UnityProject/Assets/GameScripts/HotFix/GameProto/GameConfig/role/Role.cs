@@ -25,6 +25,8 @@ public sealed partial class Role : Luban.BeanBase
         MoveSpeed = _buf.ReadFloat();
         MaxHp = _buf.ReadInt();
         BasePhysicalAttack = _buf.ReadInt();
+        AttackDistance = _buf.ReadInt();
+        NormalSkillId = _buf.ReadInt();
     }
 
     public static Role DeserializeRole(ByteBuf _buf)
@@ -68,6 +70,14 @@ public sealed partial class Role : Luban.BeanBase
     /// 基础物理攻击
     /// </summary>
     public readonly int BasePhysicalAttack;
+    /// <summary>
+    /// 攻击距离
+    /// </summary>
+    public readonly int AttackDistance;
+    /// <summary>
+    /// 普攻技能id
+    /// </summary>
+    public readonly int NormalSkillId;
    
     public const int __ID__ = 289769230;
     public override int GetTypeId() => __ID__;
@@ -88,6 +98,8 @@ public sealed partial class Role : Luban.BeanBase
         + "moveSpeed:" + MoveSpeed + ","
         + "maxHp:" + MaxHp + ","
         + "basePhysicalAttack:" + BasePhysicalAttack + ","
+        + "attackDistance:" + AttackDistance + ","
+        + "normalSkillId:" + NormalSkillId + ","
         + "}";
     }
 }

@@ -61,5 +61,7 @@
         LifeSteal,
         //攻击速度
         AttackSpeed,
+        //攻击距离
+        AttackDistance,
     }
 }

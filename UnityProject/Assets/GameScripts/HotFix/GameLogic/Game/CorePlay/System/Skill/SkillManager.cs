@@ -13,33 +13,19 @@ namespace GameLogic.Game
     {
         private List<SkillTimeLine> _skillTimeLines;
         private Dictionary<int, SkillData> _skillDataCache;
-        
-        public void Init()
+
+        public override bool OnInit()
         {
             _skillTimeLines = new List<SkillTimeLine>();
             _skillDataCache = new Dictionary<int, SkillData>();
+            return base.OnInit();
         }
 
         public void ExecuteSkill(int skillId, Action onComplete)
         {
             SkillData skillData = GetSkillDataById(skillId);
             SkillTimeLine skillTimeLine = ReferencePool.Acquire<SkillTimeLine>();
-            foreach (var t in skillData.animationTracks)
-            {
-                AnimationTrack animationTrack = ReferencePool.Acquire<AnimationTrack>();
-                foreach (var animationClip in t.clips)
-                {
-                    animationTrack.AddBehavior(animationClip);
-                }
-            }
-            foreach (var t in skillData.projectileTracks)
-            {
-                ProjectileTrack projectileTrack = ReferencePool.Acquire<ProjectileTrack>();
-                foreach (var projectileClip in t.ProjectileClipDatas)
-                {
-                    projectileTrack.AddBehavior(projectileClip);
-                }
-            }
+            skillTimeLine.InitSkillData(skillData);
             skillTimeLine.SetSkillOnComplete(onComplete);
             _skillTimeLines.Add(skillTimeLine);
         }

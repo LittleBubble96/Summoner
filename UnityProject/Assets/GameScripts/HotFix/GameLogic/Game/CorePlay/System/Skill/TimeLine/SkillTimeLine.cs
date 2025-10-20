@@ -10,7 +10,51 @@ namespace GameLogic.Game
         private float _currentTime;
         private Action _onSkillComplete;
 
-        public void SetTrack(SkillTrack skillTrack)
+        public void InitSkillData(SkillData skillData)
+        {
+            //动画轨道
+            foreach (var t in skillData.animationTracks)
+            {
+                AnimationTrack animationTrack = ReferencePool.Acquire<AnimationTrack>();
+                foreach (var animationClip in t.clips)
+                {
+                    animationTrack.AddBehavior(animationClip);
+                }
+                SetTrack(animationTrack);
+            }
+            //发射物轨道
+            foreach (var t in skillData.projectileTracks)
+            {
+                ProjectileTrack projectileTrack = ReferencePool.Acquire<ProjectileTrack>();
+                foreach (var projectileClip in t.ProjectileClipDatas)
+                {
+                    projectileTrack.AddBehavior(projectileClip);
+                }
+                SetTrack(projectileTrack);
+            }
+            //前摇轨道
+            foreach (var t in skillData.skillWindUpTracks)
+            {
+                SkillWindUpTrack windUpTrack = ReferencePool.Acquire<SkillWindUpTrack>();
+                foreach (var windUpClip in t.clipDatas)
+                {
+                    windUpTrack.AddBehavior(windUpClip);
+                }
+                SetTrack(windUpTrack);
+            }
+            //后摇轨道
+            foreach (var t in skillData.skillWindDownTracks)
+            {
+                SkillWindDownTrack windDownTrack = ReferencePool.Acquire<SkillWindDownTrack>();
+                foreach (var windDownClip in t.clipDatas)
+                {
+                    windDownTrack.AddBehavior(windDownClip);
+                }
+                SetTrack(windDownTrack);
+            }
+        }
+
+        private void SetTrack(SkillTrack skillTrack)
         {
             SkillTracks.Add(skillTrack);
         }

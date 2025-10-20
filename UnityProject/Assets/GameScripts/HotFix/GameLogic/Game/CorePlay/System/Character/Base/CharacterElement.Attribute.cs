@@ -39,10 +39,22 @@ namespace GameLogic.Game
 
         public int PhysicalAttack => GetIntAttribute_Internal(CharacterAttributeType.PhysicalBasicAttack); 
       
-        public void SetPhysicalAttack(float value)
+        public void SetPhysicalAttack(int value)
         {
-            SetFloatAttribute_Internal(CharacterAttributeType.PhysicalBasicAttack,value);
+            SetIntAttribute_Internal(CharacterAttributeType.PhysicalBasicAttack,value);
         }
+        #endregion
+
+
+        #region 攻击距离
+
+        public int AttackDistance => GetIntAttribute_Internal(CharacterAttributeType.AttackDistance);
+
+        public void SetAttackDistance(int value)
+        {
+            SetIntAttribute_Internal(CharacterAttributeType.AttackDistance,value);
+        }
+
         #endregion
         
         private int GetIntAttribute_Internal(CharacterAttributeType attributeType)

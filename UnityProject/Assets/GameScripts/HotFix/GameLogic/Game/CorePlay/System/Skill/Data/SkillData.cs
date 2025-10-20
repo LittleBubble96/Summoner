@@ -6,8 +6,14 @@ using UnityEngine;
 public class SkillData
 {
     public float duration;
+    //动画数据
     public List<AnimationTrackData> animationTracks = new List<AnimationTrackData>();
+    //发射物数据
     public List<ProjectileTrackData> projectileTracks = new List<ProjectileTrackData>();
+    //前摇数据
+    public List<SkillWindUpTrackData> skillWindUpTracks = new List<SkillWindUpTrackData>();
+    //后摇数据
+    public List<SkillWindDownTrackData> skillWindDownTracks = new List<SkillWindDownTrackData>();
 }
 
 [Serializable]
@@ -89,7 +95,7 @@ public class SummonClipData
     public float[] behaviorParameters;
 }
 
-
+// 发射物数据
 [Serializable]
 public class ProjectileTrackData : TrackDataBase
 {
@@ -103,5 +109,33 @@ public class ProjectileClipData : SkillBehaviorData
     public float startTime;
     public Vector3 position;
     public Vector3 rotation;
+    public float duration;
+}
+
+//前摇数据
+[Serializable]
+public class SkillWindUpTrackData : TrackDataBase
+{
+    public List<SkillWindUpData> clipDatas = new List<SkillWindUpData>();
+}
+
+[Serializable]
+public class SkillWindUpData : SkillBehaviorData
+{
+    public float startTime;
+    public float duration;
+}
+
+//后摇数据
+[Serializable]
+public class SkillWindDownTrackData : TrackDataBase
+{
+    public List<SkillWindDownData> clipDatas = new List<SkillWindDownData>();
+}
+
+[Serializable]
+public class SkillWindDownData : SkillBehaviorData
+{
+    public float startTime;
     public float duration;
 }

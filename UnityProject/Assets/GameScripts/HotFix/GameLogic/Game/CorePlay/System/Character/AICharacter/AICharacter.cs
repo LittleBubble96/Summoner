@@ -1,12 +1,17 @@
 ﻿using GameConfig.role;
 using GameProto;
+using UnityEngine;
 
 namespace GameLogic.Game
 {
     public class AICharacter : CharacterElement
     {
         public Role RoleConfig { get; set; }
-        public BehaviorTree BehaviorTree { get; set; }
+        protected BehaviorTree BehaviorTree { get; set; }
+        
+        public Vector3 NavTargetPosition { get; set; }
+        public bool IsNavToTarget { get; set; }
+        public float NavToTargetRemainDistance { get; set; }
 
         protected override void OnInit(CommonArgs args)
         {
@@ -33,6 +38,7 @@ namespace GameLogic.Game
             SetHp(RoleConfig.MaxHp,DamageSourceType.None);
             SetMoveSpeed(RoleConfig.MoveSpeed);
             SetPhysicalAttack(RoleConfig.BasePhysicalAttack);
+            SetAttackDistance(RoleConfig.AttackDistance);
         }
 
         public override void DoUpdate(float dt)
@@ -42,6 +48,22 @@ namespace GameLogic.Game
             {
                 BehaviorTree.Execute(dt);
             }
+        }
+        
+        //开始导航
+        public void NavToTarget(Vector3 targetPosition,float remainDistance = 0.1f)
+        {
+            NavTargetPosition = targetPosition;
+            IsNavToTarget = true;
+            NavToTargetRemainDistance = remainDistance;
+        }
+
+        //停止导航
+        public void NavToStop()
+        {
+            IsNavToTarget = false;
+            NavToTargetRemainDistance = 0;
+            NavTargetPosition = Vector3.zero;
         }
 
         public override void Clear()

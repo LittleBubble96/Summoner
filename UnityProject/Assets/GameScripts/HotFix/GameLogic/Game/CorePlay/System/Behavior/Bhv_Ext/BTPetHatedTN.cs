@@ -38,15 +38,10 @@ public class BTPetHatedTN : BTTaskNode
             return BtNodeResult.InProgress;
         }
         findTargetTime = findTargetInterval;
-        // TargetComponent targetComponent = behaviorTree.GetAIController().GetActorComponent<TargetComponent>();
-        // Actor actor = GetTargetActor();
-        // if (actor == null)
-        // {
-        //     return BtNodeResult.Failed;
-        // }
-        // targetComponent.SetTargetActorId(actor.GetActorId());
-        // targetComponent = behaviorTree.GetAIController().GetActorComponent<TargetComponent>();
-        return BtNodeResult.Succeeded;//targetComponent.TargetIsValid() ? BtNodeResult.Succeeded : BtNodeResult.Failed;
+        TargetComponent targetComponent = behaviorTree.GetOwnerCharacter().GetComponent<TargetComponent>();
+        ActorInstanceId targetId = FindTarget();
+        targetComponent.SetTargetActorId(targetId);
+        return targetComponent.TargetIsValid() ? BtNodeResult.Succeeded : BtNodeResult.Failed;
     }
 
     protected override void OnParseParams(string[] args)
@@ -63,7 +58,7 @@ public class BTPetHatedTN : BTTaskNode
         ActorInstanceId targetId = default;
         foreach (var character in allCharacter)
         {
-            if (CharacterManager.Instance.GetRelation(character.Key,ownerId) == FactionRelationType.Hostile)
+            if (CharacterManager.Instance.GetRelation(character.Key,ownerId) == FactionRelationType.Hostile && !character.Value.IsDead())
             {
                 float ds = Vector3.Distance(character.Value.GetPosition(), behaviorTree.GetOwnerCharacter().GetPosition());
                 if (ds < distance)
@@ -74,9 +69,5 @@ public class BTPetHatedTN : BTTaskNode
         }
         return targetId;
     }
-
-    // private Actor GetTargetActor()
-    // {
-    //     return RoomManager.Instance.GetMainPlayer();
-    // }
+    
 }

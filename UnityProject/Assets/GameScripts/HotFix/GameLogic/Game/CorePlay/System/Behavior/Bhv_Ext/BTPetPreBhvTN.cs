@@ -1,3 +1,4 @@
+using GameLogic.Game;
 using UnityEngine;
 
 public class BTPetPreBhvTN : BTTaskNode
@@ -45,28 +46,23 @@ public class BTPetPreBhvTN : BTTaskNode
         {
             return BtNodeResult.Failed;
         }
-        // TargetComponent targetComponent = behaviorTree.GetAIController().GetActorComponent<TargetComponent>();
-        // if (targetComponent == null)
-        // {
-        //     return BtNodeResult.Failed;
-        // }
-        // if (targetComponent.TargetActorId<=0)
-        // {
-        //     return BtNodeResult.Failed;
-        // }
-        // Actor actor = RoomManager.Instance.GetActorById(targetComponent.TargetActorId);
-        // if (actor== null)
-        // {
-        //     return BtNodeResult.Failed;
-        // }
-        // behaviorTree.GetAIController().SetTargetPosition(actor.GetPosition());
-        // float distance = Vector3.Distance(behaviorTree.GetAIController().transform.position, actor.GetPosition());
-        // //如果距离小于停止距离，则停止
-        //  if (distance < behaviorTree.GetAIController().GetAttackDistance())
-        //  {
-        //      behaviorTree.GetAIController().AgentStop();
-        //      return BtNodeResult.Succeeded;
-        //  }
+        TargetComponent targetComponent = behaviorTree.GetOwnerCharacter().GetComponent<TargetComponent>();
+        if (targetComponent == null)
+        {
+            return BtNodeResult.Failed;
+        }
+        if (!targetComponent.TargetIsValid())
+        {
+            return BtNodeResult.Failed;
+        }
+        behaviorTree.GetOwnerCharacter().NavToTarget(targetComponent.GetTargetCharacter().GetPosition());
+        float distance = Vector3.Distance(behaviorTree.GetOwnerCharacter().GetPosition(), targetComponent.GetTargetCharacter().GetPosition());
+        //如果距离小于停止距离，则停止
+         if (distance < behaviorTree.GetOwnerCharacter().AttackDistance)
+         {
+             behaviorTree.GetOwnerCharacter().NavToStop();
+             return BtNodeResult.Succeeded;
+         }
         return BtNodeResult.InProgress;
     }
 

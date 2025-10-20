@@ -23,7 +23,8 @@ public class BTPetAIBreakDN : BTDecoratorNode
 
     protected override BTDecoratorExecuteResult OnExecute(float deltaTime)
     {
-        if (behaviorTree.GetOwnerCharacter().IsDead())
+        if (behaviorTree.GetOwnerCharacter() == null || 
+            behaviorTree.GetOwnerCharacter().IsDead())
         {
             SetFailed();
         }
