@@ -61,6 +61,36 @@ namespace GameLogic.Game
                     }
                     skillData.projectileTracks.Add(projectileTrackData);
                 }
+                //读取前摇轨道
+                int windUpTrackCount = byteArray.ReadInt();
+                for (int i = 0; i < windUpTrackCount; i++)
+                {
+                    SkillWindUpTrackData trackData = new SkillWindUpTrackData();
+                    int clipCount = byteArray.ReadInt();
+                    for (int j = 0; j < clipCount; j++)
+                    {
+                        SkillWindUpData clipData = new SkillWindUpData();
+                        clipData.startTime = byteArray.ReadFloat();
+                        clipData.duration = byteArray.ReadFloat();
+                        trackData.clipDatas.Add(clipData);
+                    }
+                    skillData.skillWindUpTracks.Add(trackData);
+                }
+                //读取后摇轨道
+                int windDownTrackCount = byteArray.ReadInt();
+                for (int i = 0; i < windDownTrackCount; i++)
+                {
+                    SkillWindDownTrackData trackData = new SkillWindDownTrackData();
+                    int clipCount = byteArray.ReadInt();
+                    for (int j = 0; j < clipCount; j++)
+                    {
+                        SkillWindDownData clipData = new SkillWindDownData();
+                        clipData.startTime = byteArray.ReadFloat();
+                        clipData.duration = byteArray.ReadFloat();
+                        trackData.clipDatas.Add(clipData);
+                    }
+                    skillData.skillWindDownTracks.Add(trackData);
+                }
             }
             return skillData;
         }
@@ -98,6 +128,28 @@ namespace GameLogic.Game
                         byteArray.WriteFloat(projectileClip.duration);
                         byteArray.WriteVector3(projectileClip.position.x, projectileClip.position.y, projectileClip.position.z);
                         byteArray.WriteVector3(projectileClip.rotation.x, projectileClip.rotation.y, projectileClip.rotation.z);
+                    }
+                }
+                //写入前摇轨道
+                byteArray.WriteInt(skillData.skillWindUpTracks.Count);
+                foreach (var windUpTrack in skillData.skillWindUpTracks)
+                {
+                    byteArray.WriteInt(windUpTrack.clipDatas.Count);
+                    foreach (var windUpClip in windUpTrack.clipDatas)
+                    {
+                        byteArray.WriteFloat(windUpClip.startTime);
+                        byteArray.WriteFloat(windUpClip.duration);
+                    }
+                }
+                //写入后摇轨道
+                byteArray.WriteInt(skillData.skillWindDownTracks.Count);
+                foreach (var windDownTrack in skillData.skillWindDownTracks)
+                {
+                    byteArray.WriteInt(windDownTrack.clipDatas.Count);
+                    foreach (var windDownClip in windDownTrack.clipDatas)
+                    {
+                        byteArray.WriteFloat(windDownClip.startTime);
+                        byteArray.WriteFloat(windDownClip.duration);
                     }
                 }
                 string fullPath = Path.Combine(Application.dataPath, "../", SkillDataSavePath, $"Skill_{skillId}.bytes");

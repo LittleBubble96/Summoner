@@ -9,9 +9,11 @@ namespace GameLogic.Game
         public List<SkillTrack> SkillTracks = new List<SkillTrack>();
         private float _currentTime;
         private Action _onSkillComplete;
+        private ActorInstanceId _ownerActorInstanceId;
 
-        public void InitSkillData(SkillData skillData)
+        public void InitSkillData(SkillData skillData,ActorInstanceId actorInstanceId)
         {
+            _ownerActorInstanceId = actorInstanceId;
             //动画轨道
             foreach (var t in skillData.animationTracks)
             {
@@ -56,6 +58,7 @@ namespace GameLogic.Game
 
         private void SetTrack(SkillTrack skillTrack)
         {
+            skillTrack.Init(_ownerActorInstanceId);
             SkillTracks.Add(skillTrack);
         }
 

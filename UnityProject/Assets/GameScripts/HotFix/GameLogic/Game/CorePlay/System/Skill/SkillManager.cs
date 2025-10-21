@@ -21,11 +21,11 @@ namespace GameLogic.Game
             return base.OnInit();
         }
 
-        public void ExecuteSkill(int skillId, Action onComplete)
+        public void ExecuteSkill(int skillId , ActorInstanceId actorInstanceId, Action onComplete)
         {
             SkillData skillData = GetSkillDataById(skillId);
             SkillTimeLine skillTimeLine = ReferencePool.Acquire<SkillTimeLine>();
-            skillTimeLine.InitSkillData(skillData);
+            skillTimeLine.InitSkillData(skillData,actorInstanceId);
             skillTimeLine.SetSkillOnComplete(onComplete);
             _skillTimeLines.Add(skillTimeLine);
         }

@@ -119,7 +119,7 @@ public class SkillEditorWindow : EditorWindow
                     if (animClip != null)
                     {
                         AnimationClipData clipData = new AnimationClipData();
-                        clipData.clipName = animClip.template.animationClip != null ? animClip.template.animationClip.name : "";
+                        clipData.clipName = animClip.animationClip != null ? animClip.animationClip.name : "";
                         clipData.startTime = (float)clip.start;
                         clipData.duration = (float)clip.duration;
                         clipData.speed = animClip.template.speed;
@@ -131,75 +131,6 @@ public class SkillEditorWindow : EditorWindow
                 
                 skillData.animationTracks.Add(animData);
             }
-            else if (track is EffectTrack effectTrack)
-            {
-                EffectTrackData effectData = new EffectTrackData();
-                effectData.trackName = track.name;
-                
-                foreach (var clip in track.GetClips())
-                {
-                    EffectClip effectClip = clip.asset as EffectClip;
-                    if (effectClip != null)
-                    {
-                        EffectClipData clipData = new EffectClipData();
-                        clipData.effectPrefabPath = AssetDatabase.GetAssetPath(effectClip.template.effectPrefab);
-                        clipData.startTime = (float)clip.start;
-                        clipData.duration = (float)clip.duration;
-                        clipData.positionOffset = effectClip.template.positionOffset;
-                        clipData.rotationOffset = effectClip.template.rotationOffset;
-                        clipData.scale = effectClip.template.scale;
-                        clipData.followTarget = effectClip.template.followTarget;
-                        clipData.attachPoint = effectClip.template.attachPoint;
-                        
-                        effectData.effects.Add(clipData);
-                    }
-                }
-                
-                // skillData.effectTracks.Add(effectData);
-            }
-            else if (track is BuffTrack buffTrack)
-            {
-                BuffTrackData buffData = new BuffTrackData();
-                buffData.trackName = track.name;
-                
-                foreach (var clip in track.GetClips())
-                {
-                    BuffClip buffClip = clip.asset as BuffClip;
-                    if (buffClip != null)
-                    {
-                        BuffClipData clipData = new BuffClipData();
-                        clipData.buffId = buffClip.template.buffId;
-                        clipData.startTime = (float)clip.start;
-                        clipData.duration = (float)clip.duration;
-                        
-                        buffData.buffs.Add(clipData);
-                    }
-                }
-                
-                // skillData.buffTracks.Add(buffData);
-            }
-            else if (track is SummonTrack summonTrack)
-            {
-                SummonTrackData summonData = new SummonTrackData();
-                summonData.trackName = track.name;
-                
-                foreach (var clip in track.GetClips())
-                {
-                    SummonClip summonClip = clip.asset as SummonClip;
-                    if (summonClip != null)
-                    {
-                        SummonClipData clipData = new SummonClipData();
-                        clipData.startTime = (float)clip.start;
-                        clipData.position = summonClip.template.positionOffset;
-                        clipData.rotation = summonClip.template.rotationOffset;
-                        
-                        summonData.summons.Add(clipData);
-                    }
-                }
-                
-                // skillData.summonTracks.Add(summonData);
-            }
-            
             else if (track is ProjectileParameterTrack projectileParameterTrack)
             {
                 ProjectileTrackData projectileTrackData = new ProjectileTrackData();
@@ -213,12 +144,49 @@ public class SkillEditorWindow : EditorWindow
                         ProjectileClipData clipData = new ProjectileClipData();
                         clipData.startTime = (float)clip.start;
                         clipData.duration = (float)clip.duration;
-                        clipData.position = projectileParameterClip.template.position;
-                        clipData.rotation = projectileParameterClip.template.rotation;
+                        clipData.projectileId = projectileParameterClip.projectileId;
+                        clipData.position = projectileParameterClip.position;
+                        clipData.rotation = projectileParameterClip.rotation;
                         projectileTrackData.ProjectileClipDatas.Add(clipData);
                     }
                 }
                 skillData.projectileTracks.Add(projectileTrackData);
+            }
+            else if (track is WindUpParameterTrack windUpParameterTrack)
+            {
+                SkillWindUpTrackData trackData = new SkillWindUpTrackData();
+                trackData.trackName = track.name;
+                
+                foreach (var clip in track.GetClips())
+                {
+                    WindUpParameterClip clipViewData = clip.asset as WindUpParameterClip;
+                    if (clipViewData != null)
+                    {
+                        SkillWindUpData clipData = new SkillWindUpData();
+                        clipData.startTime = (float)clip.start;
+                        clipData.duration = (float)clip.duration;
+                        trackData.clipDatas.Add(clipData);
+                    }
+                }
+                skillData.skillWindUpTracks.Add(trackData);
+            }
+            else if (track is WindDownParameterTrack parameterTrack)
+            {
+                SkillWindDownTrackData trackData = new SkillWindDownTrackData();
+                trackData.trackName = track.name;
+                
+                foreach (var clip in track.GetClips())
+                {
+                    WindDownParameterClip clipViewData = clip.asset as WindDownParameterClip;
+                    if (clipViewData != null)
+                    {
+                        SkillWindDownData clipData = new SkillWindDownData();
+                        clipData.startTime = (float)clip.start;
+                        clipData.duration = (float)clip.duration;
+                        trackData.clipDatas.Add(clipData);
+                    }
+                }
+                skillData.skillWindDownTracks.Add(trackData);
             }
         }
         SkillDataParse.Write(skillName,skillData);

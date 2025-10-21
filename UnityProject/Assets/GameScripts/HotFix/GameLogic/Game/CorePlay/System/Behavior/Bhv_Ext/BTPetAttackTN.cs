@@ -12,7 +12,7 @@ public class BTPetAttackTN : BTTaskNode
     protected override void OnBegin()
     {
         m_isInSkilling = true;
-        SkillManager.Instance.ExecuteSkill(behaviorTree.GetOwnerCharacter().RoleConfig.NormalSkillId, () =>
+        SkillManager.Instance.ExecuteSkill(behaviorTree.GetOwnerCharacter().RoleConfig.NormalSkillId,behaviorTree.GetOwnerCharacter().ActorInstanceId, () =>
         {
             m_isInSkilling = false;
         });

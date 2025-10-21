@@ -6,7 +6,13 @@ namespace GameLogic.Game
     public class SkillTrack : IReference
     {
         public List<SkillBehavior> Behaviors = new List<SkillBehavior>();
-        
+        private ActorInstanceId _ownerActorInstanceId;
+
+        public void Init(ActorInstanceId actorInstanceId)
+        {
+            _ownerActorInstanceId = actorInstanceId;
+        }
+
         public virtual void AddBehavior(SkillBehaviorData behaviorData)
         {
             
@@ -14,6 +20,7 @@ namespace GameLogic.Game
 
         protected void AddBehaviorInList(SkillBehavior skillBehavior)
         {
+            skillBehavior.Init(_ownerActorInstanceId);
             Behaviors.Add(skillBehavior);
         }
 
