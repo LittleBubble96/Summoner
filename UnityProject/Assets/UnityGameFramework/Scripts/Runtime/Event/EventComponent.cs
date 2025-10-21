@@ -150,5 +150,20 @@ namespace UnityGameFramework.Runtime
         {
             m_EventManager.FireNow(sender, e);
         }
+        
+        /// <summary>
+        /// 抛出事件立即模式，这个操作不是线程安全的，事件会立刻分发。
+        /// </summary>
+        public void FireNow<T,T1,T2>(object sender, int eventId ,T param,T1 param1,T2 param2)
+        {
+            GameEventCustomThreeParam<T,T1,T2> eventCustom = ReferencePool.Acquire<GameEventCustomThreeParam<T,T1,T2>>();
+            eventCustom.CustomId = eventId;
+            eventCustom.Param = param;
+            eventCustom.Param1 = param1;
+            eventCustom.Param2 = param2;
+            m_EventManager.FireNow(sender, eventCustom);
+            ReferencePool.Release(eventCustom);
+        }
+       
     }
 }

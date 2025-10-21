@@ -6,7 +6,6 @@ namespace GameLogic.Game
 {
     public class MainCharacterView : CharacterBaseView
     {
-        [SerializeField] private Animator m_animator;
         [SerializeField] private CharacterController m_characterController;
         
         public MainCharacter MainCharacter { get; set; }
@@ -22,7 +21,7 @@ namespace GameLogic.Game
             MainCharacter = CharacterElement as MainCharacter;
         }
 
-        public override void DoUpdate(float dt)
+        protected override void DoUpdate_Internal(float dt)
         {
             if (MainCharacter == null)
             {

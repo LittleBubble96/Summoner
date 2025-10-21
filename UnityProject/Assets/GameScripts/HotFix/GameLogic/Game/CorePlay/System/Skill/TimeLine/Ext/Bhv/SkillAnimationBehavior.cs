@@ -6,10 +6,21 @@
 
         public override void OnEnter()
         {
-            base.OnEnter();
-            //TODO 播放角色动画
+            CharacterElement character = GetCharacter();
+            if (character !=null && !character.IsDead())
+            {
+                character.SetAnimationBool(AnimationData.clipName,true);
+            }
         }
-        
+
+        public override void OnExit()
+        {
+            CharacterElement character = GetCharacter();
+            if (character !=null && !character.IsDead())
+            {
+                character.SetAnimationBool(AnimationData.clipName,false);
+            }
+        }
     }
 
 }

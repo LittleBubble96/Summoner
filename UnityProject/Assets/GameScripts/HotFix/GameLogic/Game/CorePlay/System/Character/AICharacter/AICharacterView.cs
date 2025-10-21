@@ -9,14 +9,14 @@ namespace GameLogic.Game
     {
         public AICharacter AICharacterData { get; set; }
         [SerializeField] private NavMeshAgent agent;
-
+    
         protected override void OnInitCharacter()
         {
             base.OnInitCharacter();
             AICharacterData = CharacterElement as AICharacter;
         }
 
-        public override void DoUpdate(float dt)
+        protected override void DoUpdate_Internal(float dt)
         {
             base.DoUpdate(dt);
             if (AICharacterData.IsNavToTarget)
@@ -24,8 +24,15 @@ namespace GameLogic.Game
                 agent.isStopped = false;
                 agent.speed = AICharacterData.MoveSpeed;
                 agent.SetDestination(AICharacterData.NavTargetPosition);
+                agent.updateRotation = AICharacterData.NavUpdateRotation;
+            }
+
+            if (AICharacterData.IsManualControlRotation)
+            {
+                transform.eulerAngles = AICharacterData.ManualControlRotation;
             }
             CharacterElement.SetPosition(transform.position);
+            CharacterElement.SetRotation(transform.eulerAngles);
         }
     }
 }

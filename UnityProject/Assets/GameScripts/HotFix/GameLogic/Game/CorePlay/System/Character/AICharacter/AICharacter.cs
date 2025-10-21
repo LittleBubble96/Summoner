@@ -9,9 +9,13 @@ namespace GameLogic.Game
         public Role RoleConfig { get; set; }
         protected BehaviorTree BehaviorTree { get; set; }
         
+        //导航位置
         public Vector3 NavTargetPosition { get; set; }
         public bool IsNavToTarget { get; set; }
         public float NavToTargetRemainDistance { get; set; }
+
+        public bool NavUpdateRotation => !IsManualControlRotation; //寻路是否控制旋转
+
 
         protected override void OnInit(CommonArgs args)
         {
@@ -65,7 +69,7 @@ namespace GameLogic.Game
             NavToTargetRemainDistance = 0;
             NavTargetPosition = Vector3.zero;
         }
-
+        
         public override void Clear()
         {
             base.Clear();

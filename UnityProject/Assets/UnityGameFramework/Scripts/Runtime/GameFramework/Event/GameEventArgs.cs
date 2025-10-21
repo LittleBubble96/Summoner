@@ -19,16 +19,34 @@
         public override int Id { get => CustomId; }
     }
     
-    public class GameEventCustomOneParam<T> : GameEventArgs
+    public class GameEventCustomOneParam<T> : GameEventCustom
     {
-        public int CustomId { get; set; }
         public T Param { get; set; }
 
         public override void Clear()
         {
-            CustomId = 0;
+            base.Clear();
+            Param = default(T);
         }
-
-        public override int Id { get => CustomId; }
+    }
+    
+    public class GameEventCustomTwoParam<T,T1> : GameEventCustomOneParam<T>
+    {
+        public T1 Param1 { get; set; }
+        public override void Clear()
+        {
+            base.Clear();
+            Param1 = default(T1);
+        }
+    }
+    
+    public class GameEventCustomThreeParam<T,T1,T2> : GameEventCustomTwoParam<T,T1>
+    {
+        public T2 Param2 { get; set; }
+        public override void Clear()
+        {
+            base.Clear();
+            Param2 = default(T2);
+        }
     }
 }

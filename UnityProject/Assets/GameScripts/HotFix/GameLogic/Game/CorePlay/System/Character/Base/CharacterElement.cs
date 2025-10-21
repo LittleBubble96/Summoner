@@ -9,6 +9,10 @@ namespace GameLogic.Game
         public ActorInstanceId ActorInstanceId { get; set; }
         protected Vector3 Position;
         protected Vector3 Rotation;
+        //手动控制朝向
+        public bool IsManualControlRotation { get; set; }
+        public Vector3 ManualControlRotation { get; set; }
+
         public CharacterFactionType FactionType = CharacterFactionType.Player;
         // 角色属性字典
         public Dictionary<CharacterAttributeType,CharacterAttributeValue> AttributeDic = new Dictionary<CharacterAttributeType, CharacterAttributeValue>();
@@ -17,6 +21,7 @@ namespace GameLogic.Game
         {
             OnInit(args);
             OnInitAttribute();
+            RegisterActorComponent();
         }
         
         protected virtual void OnInit(CommonArgs args)
@@ -63,6 +68,33 @@ namespace GameLogic.Game
         {
             return Rotation;
         }
+        
+        #region 手动控制旋转
+
+        public void ManualControlRotationStart(Vector3 eulerAngles)
+        {
+            IsManualControlRotation = true;
+            ManualControlRotation = eulerAngles;
+        }
+        
+        public void CancelManualControlRotation()
+        {
+            IsManualControlRotation = false;
+            ManualControlRotation = Vector3.zero;
+        }
+
+        #endregion
+
+        #region 动画
+
+        public void SetAnimationBool(string animName , bool value)
+        {
+            XYEvent.GEvent.FireNow(this,EventDefine.CharacterAnimationSetBoolEventName,this.ActorInstanceId,animName,value);
+        }
+        
+
+        #endregion
+
 
         public virtual void Clear()
         {
