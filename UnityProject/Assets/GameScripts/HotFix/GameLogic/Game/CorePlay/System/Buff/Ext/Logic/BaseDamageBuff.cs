@@ -23,11 +23,7 @@
             {
                 _baseDamage = belongToElement.PhysicalAttack;
             }
-            CharacterElement attachToElement = CharacterManager.Instance.GetCharacter(AttachToActor);
-            if (attachToElement != null && !attachToElement.IsDead())
-            {
-                attachToElement.IncreaseHp(_baseDamage,DamageSourceType.PhysicalAttack);
-            }
+            CharacterManager.Instance.DamageCharacter(AttachToActor,_baseDamage,DamageSourceType.PhysicalAttack);
         }
     }
 }

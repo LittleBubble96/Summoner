@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using GameConfig.role;
 using GameFramework;
 using UnityEngine;
 
@@ -6,9 +8,11 @@ namespace GameLogic.Game
 {
     public partial class CharacterElement : IReference
     {
+        public Role RoleConfig { get; set; }
         public ActorInstanceId ActorInstanceId { get; set; }
         protected Vector3 Position;
         protected Vector3 Rotation;
+        
         //手动控制朝向
         public bool IsManualControlRotation { get; set; }
         public Vector3 ManualControlRotation { get; set; }
@@ -16,6 +20,13 @@ namespace GameLogic.Game
         public CharacterFactionType FactionType = CharacterFactionType.Player;
         // 角色属性字典
         public Dictionary<CharacterAttributeType,CharacterAttributeValue> AttributeDic = new Dictionary<CharacterAttributeType, CharacterAttributeValue>();
+
+        #region 回调
+
+        public Action<CommonArgs> OnDie { get; set; }
+        public Action<CommonArgs> OnDieComplete { get; set; }
+
+        #endregion
 
         public void Init(CommonArgs args)
         {
@@ -41,12 +52,28 @@ namespace GameLogic.Game
 
         public virtual void DoUpdate(float dt)
         {
-            
+           
         }
 
         public bool IsDead()
         {
             return Hp <= 0;
+        }
+
+        public void Damage(int value,DamageSourceType damageSourceType)
+        {
+            IncreaseHp(value,damageSourceType);
+        }
+
+        public virtual void Death()
+        {
+            OnDie?.Invoke(CommonArgs.CreateOneArgs(this.ActorInstanceId));
+        }
+        
+        public virtual void DeathComplete()
+        {
+            OnDieComplete?.Invoke(CommonArgs.CreateOneArgs(this.ActorInstanceId));
+            CharacterManager.Instance.DestroyCharacter(ActorInstanceId);
         }
 
         public void SetPosition(Vector3 targetPos)
@@ -103,6 +130,8 @@ namespace GameLogic.Game
             FactionType = CharacterFactionType.Player;
             AttributeDic.Clear();
             OnAttributeChanged = null;
+            OnDie = null;
+            OnDieComplete = null;
             ClearComponent();
         }
     }

@@ -6,7 +6,6 @@ namespace GameLogic.Game
 {
     public class AICharacter : CharacterElement
     {
-        public Role RoleConfig { get; set; }
         protected BehaviorTree BehaviorTree { get; set; }
         
         //导航位置
@@ -15,7 +14,8 @@ namespace GameLogic.Game
         public float NavToTargetRemainDistance { get; set; }
 
         public bool NavUpdateRotation => !IsManualControlRotation; //寻路是否控制旋转
-
+        //死亡倒计时
+        private float _deathTimer;
 
         protected override void OnInit(CommonArgs args)
         {
@@ -28,7 +28,8 @@ namespace GameLogic.Game
                 }
                 RoleConfig = role;
                 BehaviorTree = new BehaviorTree();
-                BehaviorTree.Init(new BTGenInfo(RoleConfig.Ai));
+                int aiId = FactionType == CharacterFactionType.Enemy ? RoleConfig.EmemyAi : RoleConfig.Ai;
+                BehaviorTree.Init(new BTGenInfo(aiId));
             }
         }
 
@@ -48,12 +49,27 @@ namespace GameLogic.Game
         public override void DoUpdate(float dt)
         {
             base.DoUpdate(dt);
+            // 处理死亡倒计时
+            if (_deathTimer > 0)
+            {
+                _deathTimer -= dt;
+                if (_deathTimer <= 0)
+                {
+                    DeathComplete();
+                }
+            }
             if (BehaviorTree != null)
             {
                 BehaviorTree.Execute(dt);
             }
         }
-        
+
+        public override void Death()
+        {
+            base.Death();
+            _deathTimer = RoleConfig.DeathTime;
+        }
+
         //开始导航
         public void NavToTarget(Vector3 targetPosition,float remainDistance = 0.1f)
         {
@@ -74,6 +90,7 @@ namespace GameLogic.Game
         {
             base.Clear();
             RoleConfig = null;
+            _deathTimer = 0;
         }
     }
 }

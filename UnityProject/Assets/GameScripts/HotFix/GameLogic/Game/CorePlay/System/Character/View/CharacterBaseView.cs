@@ -14,6 +14,9 @@ namespace GameLogic.Game
         {
             CharacterElement = character;
             CharacterElement.OnAttributeChanged += OnAttributeChanged;
+            CharacterElement.OnDie += OnDie;
+            CharacterElement.OnDieComplete += DeathComplete;
+            OnInitCharacter();
         }
 
         private void OnEnable()
@@ -58,7 +61,20 @@ namespace GameLogic.Game
             
         }
 
+        // 属性变化回调
         protected virtual void OnAttributeChanged(CommonArgs args)
+        {
+            
+        }
+        
+        //死亡回调
+        protected virtual void OnDie(CommonArgs args)
+        {
+            
+        }
+        
+        //死亡完成回调
+        protected virtual void DeathComplete(CommonArgs args)
         {
             
         }

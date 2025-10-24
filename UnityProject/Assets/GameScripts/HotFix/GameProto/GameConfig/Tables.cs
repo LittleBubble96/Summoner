@@ -69,6 +69,24 @@ public partial class Tables
             m_TbBuff.ResolveRef(this);
         }
     }
+    private enemyLevel.TbEnemyLevel m_TbEnemyLevel;
+    public enemyLevel.TbEnemyLevel TbEnemyLevel 
+    {
+        get
+        {
+            if (m_TbEnemyLevel == null)
+            {
+                m_TbEnemyLevel = new enemyLevel.TbEnemyLevel(defaultLoader("enemylevel_tbenemylevel"));
+                m_TbEnemyLevel.ResolveRef(this);
+            }
+            return m_TbEnemyLevel;
+        }
+        set
+        {
+            m_TbEnemyLevel = value;
+            m_TbEnemyLevel.ResolveRef(this);
+        }
+    }
 
     #endregion
 

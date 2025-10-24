@@ -22,10 +22,12 @@ public sealed partial class Role : Luban.BeanBase
         ResPath = _buf.ReadString();
         Cost = _buf.ReadInt();
         Ai = _buf.ReadInt();
+        EmemyAi = _buf.ReadInt();
         MoveSpeed = _buf.ReadFloat();
         MaxHp = _buf.ReadInt();
         BasePhysicalAttack = _buf.ReadInt();
         AttackDistance = _buf.ReadInt();
+        DeathTime = _buf.ReadInt();
         NormalSkillId = _buf.ReadInt();
     }
 
@@ -59,6 +61,10 @@ public sealed partial class Role : Luban.BeanBase
     /// </summary>
     public readonly int Ai;
     /// <summary>
+    /// 作为敌人时ai
+    /// </summary>
+    public readonly int EmemyAi;
+    /// <summary>
     /// 移动速度
     /// </summary>
     public readonly float MoveSpeed;
@@ -74,6 +80,10 @@ public sealed partial class Role : Luban.BeanBase
     /// 攻击距离
     /// </summary>
     public readonly int AttackDistance;
+    /// <summary>
+    /// 死亡时间（ms）
+    /// </summary>
+    public readonly int DeathTime;
     /// <summary>
     /// 普攻技能id
     /// </summary>
@@ -95,10 +105,12 @@ public sealed partial class Role : Luban.BeanBase
         + "resPath:" + ResPath + ","
         + "cost:" + Cost + ","
         + "ai:" + Ai + ","
+        + "ememyAi:" + EmemyAi + ","
         + "moveSpeed:" + MoveSpeed + ","
         + "maxHp:" + MaxHp + ","
         + "basePhysicalAttack:" + BasePhysicalAttack + ","
         + "attackDistance:" + AttackDistance + ","
+        + "deathTime:" + DeathTime + ","
         + "normalSkillId:" + NormalSkillId + ","
         + "}";
     }

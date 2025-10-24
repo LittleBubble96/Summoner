@@ -16,8 +16,12 @@ namespace GameLogic.Game
         public ICharacterView CharacterView => m_CharacterView;
         public ActorInstanceId MainActorId { get; private set; }
 
+        private EnemyManager _enemyManager;
+        public static EnemyManager EnemyManager => Instance._enemyManager;
+
         public override bool OnInit()
         {
+            _enemyManager = new EnemyManager();
             InitRelation();
             return base.OnInit();
         }
@@ -25,11 +29,13 @@ namespace GameLogic.Game
         public void InitCharacter()
         {
             CreateMainCharacter();
+            _enemyManager.StartSpawn();
         }
 
         public override void OnUpdate()
         {
             base.OnUpdate();
+            _enemyManager.OnUpdate();
             foreach (var character in CharacterDic.Values)
             {
                 character.DoUpdate(Time.deltaTime);
@@ -41,7 +47,7 @@ namespace GameLogic.Game
             ProcessDestroyQueue();
         }
 
-        public void CreateAICharacter(int roleId , Vector3 position , Vector3 rotation, CharacterFactionType factionType)
+        public ActorInstanceId CreateAICharacter(int roleId , Vector3 position , Vector3 rotation, CharacterFactionType factionType)
         {
             AICharacter ai = new AICharacter();
             ai.ActorInstanceId = ActorInstanceId.NewId();
@@ -51,6 +57,7 @@ namespace GameLogic.Game
             ai.Init(CommonArgs.CreateOneArgs(roleId));
             CharacterView?.OnCreateAICharacter(ai);
             CharacterDic.Add(ai.ActorInstanceId,ai);
+            return ai.ActorInstanceId;
         }
 
         private void CreateMainCharacter()
@@ -107,7 +114,25 @@ namespace GameLogic.Game
         {
             m_CharacterView = view;
         }
-        
+
+        // 角色受伤
+        public void DamageCharacter(ActorInstanceId actorInstanceId,int value,DamageSourceType damageSourceType)
+        {
+            if (CharacterDic.TryGetValue(actorInstanceId,out var characterElement) && !characterElement.IsDead())
+            {
+                characterElement.Damage(value,damageSourceType);
+                if (characterElement.Hp <= 0)
+                {
+                    characterElement.Death();
+                }
+            }
+        }
+
+
+        public void ExitCharacter()
+        {
+            _enemyManager.StopSpawn();
+        }
         
     }
 }
