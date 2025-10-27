@@ -9,6 +9,26 @@ namespace GameLogic.Game
     {
         private const string SkillDataSavePath = "Assets/AssetRaw/Configs/Skills/";
 
+        public static string GetSkillDataPath(int skillId)
+        {
+            string fullPath = Path.Combine(Application.dataPath, "../", SkillDataSavePath, $"Skill_{skillId}.bytes");
+            return fullPath;
+        }
+
+        public static SkillData ReadByLocalFile(int skillId)
+        {
+            string fullPath = GetSkillDataPath(skillId);
+            if (!File.Exists(fullPath))
+            {
+                Log.Error($"没有找到对应的技能配置:{fullPath}");
+                return null;
+            }
+            SkillData skillData = new SkillData();
+            using ByteArray byteArray = new ByteArray(File.ReadAllBytes(fullPath));
+            ReadBytesInSkillData(skillData, byteArray);
+            return skillData;
+        }
+
         public static SkillData Read(int skillId)
         {
             //加载技能
@@ -20,9 +40,14 @@ namespace GameLogic.Game
                 return null;
             }
             SkillData skillData = new SkillData();
-            using (ByteArray byteArray = new ByteArray(skillText.bytes))
-            {
-                skillData.duration = byteArray.ReadFloat();
+            using ByteArray byteArray = new ByteArray(skillText.bytes);
+            ReadBytesInSkillData(skillData, byteArray);
+            return skillData;
+        }
+
+        private static void ReadBytesInSkillData(SkillData skillData , ByteArray byteArray)
+        {
+            skillData.duration = byteArray.ReadFloat();
                 //读取动画轨道
                 int trackCount = byteArray.ReadInt();
                 for (int i = 0; i < trackCount; i++)
@@ -91,8 +116,6 @@ namespace GameLogic.Game
                     }
                     skillData.skillWindDownTracks.Add(trackData);
                 }
-            }
-            return skillData;
         }
 
         public static void Write(int skillId , SkillData skillData)
@@ -152,7 +175,7 @@ namespace GameLogic.Game
                         byteArray.WriteFloat(windDownClip.duration);
                     }
                 }
-                string fullPath = Path.Combine(Application.dataPath, "../", SkillDataSavePath, $"Skill_{skillId}.bytes");
+                string fullPath = GetSkillDataPath(skillId);
                 File.WriteAllBytes(fullPath, byteArray.Bytes);
                 Log.Info("Skill data exported successfully to: " + fullPath);
             }

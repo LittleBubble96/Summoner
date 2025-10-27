@@ -477,7 +477,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8803932490990916239}
   m_Layer: 0
-  m_Name: Monster_Batty_A
+  m_Name: 1001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

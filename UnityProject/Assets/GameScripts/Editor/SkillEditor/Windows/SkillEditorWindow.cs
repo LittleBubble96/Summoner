@@ -2,8 +2,6 @@
 using UnityEditor;
 using UnityEditor.Timeline;
 using UnityEngine.Timeline;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 using GameLogic.Game;
 using UnityEngine.Playables;
 
@@ -11,7 +9,25 @@ public class SkillEditorWindow : EditorWindow
 {
     private TimelineAsset timelineAsset;
     private int skillName = 1;
+    private int characterId = 1001;
     private PlayableDirector playableDirector;
+
+    private Transform roleParent;
+    private Transform RoleParent
+    {
+        get
+        {
+            if (!roleParent)
+            {
+                roleParent = GameObject.Find("RoleParent")?.transform;
+                if (!roleParent)
+                {
+                    roleParent = new GameObject("RoleParent").transform;
+                }
+            }
+            return roleParent;
+        }
+    }
 
     [MenuItem("Window/技能编辑器")]
     public static void ShowWindow()
@@ -24,6 +40,7 @@ public class SkillEditorWindow : EditorWindow
         GUILayout.Label("技能设置", EditorStyles.boldLabel);
         
         skillName = EditorGUILayout.IntField("技能名", skillName);
+        characterId = EditorGUILayout.IntField("角色ID", characterId);
         timelineAsset = EditorGUILayout.ObjectField("Timeline Asset", timelineAsset, typeof(TimelineAsset), false) as TimelineAsset;
         playableDirector = EditorGUILayout.ObjectField("Playable Director", playableDirector, typeof(PlayableDirector), true) as PlayableDirector;
 
@@ -31,20 +48,7 @@ public class SkillEditorWindow : EditorWindow
         
         if (GUILayout.Button("Open Timeline Editor"))
         {
-            if (timelineAsset != null)
-            {
-                TimelineEditorWindow window = EditorWindow.GetWindow<TimelineEditorWindow>();
-                window.Show();
-                window.SetTimeline(timelineAsset);
-                if (playableDirector != null)
-                {
-                    playableDirector.playableAsset = timelineAsset;
-                }
-            }
-            else
-            {
-                Debug.LogWarning("Please assign a Timeline Asset first!");
-            }
+            OpenTimeLine();
         }
 
         GUILayout.Space(10);
@@ -191,5 +195,82 @@ public class SkillEditorWindow : EditorWindow
         }
         SkillDataParse.Write(skillName,skillData);
         AssetDatabase.Refresh();
+    }
+
+    private void OpenTimeLine()
+    {
+        ReadTimeLineAsset();
+        ReadCharacterResInTime();
+        string fullPath = SkillDataParse.GetSkillDataPath(skillName);
+        SkillData skillData = SkillDataParse.ReadByLocalFile(skillName);
+
+    }
+
+    private string GetTimeLineResPath()
+    {
+        return $"Assets/Skill/res/Skill_{skillName}.playable";
+    }
+    
+    private string GetCharacterResPath()
+    {
+        return $"Assets/AssetRaw/Actor/Monster/{characterId}/{characterId}.prefab";
+    }
+
+    //读取资源的timeLine
+    private void ReadTimeLineAsset()
+    {
+        TimelineAsset timeline = AssetDatabase.LoadAssetAtPath<TimelineAsset>(GetTimeLineResPath());
+        if (timeline == null)
+        {
+            Debug.LogError("未找到对应的Timeline资源，路径：" + GetTimeLineResPath());
+            return;
+        }
+
+        if (playableDirector == null)
+        {
+            playableDirector = FindObjectOfType<PlayableDirector>();
+        }
+        timelineAsset = timeline;
+        TimelineEditorWindow window = EditorWindow.GetWindow<TimelineEditorWindow>();
+        window.Show();
+        window.titleContent = new GUIContent($"技能编辑器 - Skill_{skillName}");
+        window.SetTimeline(timelineAsset);
+        if (playableDirector != null)
+        {
+            playableDirector.playableAsset = timelineAsset;
+        }
+        Selection.activeObject = playableDirector;
+    }
+
+    //读取角色资源并赋值给timeLine
+    private void ReadCharacterResInTime()
+    {
+        ClearParent();
+        GameObject actorObj = AssetDatabase.LoadAssetAtPath<GameObject>(GetCharacterResPath());
+        if (actorObj == null)
+        {
+            Debug.LogError("未找到对应的角色资源，路径：" + GetCharacterResPath());
+            return;
+        }
+        actorObj = PrefabUtility.InstantiatePrefab(actorObj ,RoleParent) as GameObject;
+        if (actorObj == null)
+        {
+            Debug.LogError("角色资源实例化失败，路径：" + GetCharacterResPath());
+            return;
+        }
+        Animator animator = actorObj.GetComponentInChildren<Animator>();
+        playableDirector.SetGenericBinding(timelineAsset.GetOutputTrack(0), animator);
+    }
+
+    private void ClearParent()
+    {
+        for (int i = RoleParent.childCount - 1; i >= 0; i--)
+        {
+            Transform child = RoleParent.GetChild(i);
+            if (child)
+            {
+                GameObject.DestroyImmediate(child.gameObject);
+            }
+        }
     }
 }
