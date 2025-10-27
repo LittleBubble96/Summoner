@@ -29,7 +29,7 @@ namespace GameLogic.Game
                 RoleConfig = role;
                 BehaviorTree = new BehaviorTree();
                 int aiId = FactionType == CharacterFactionType.Enemy ? RoleConfig.EmemyAi : RoleConfig.Ai;
-                BehaviorTree.Init(new BTGenInfo(aiId));
+                BehaviorTree.Init(new BTGenInfo(aiId),this);
             }
         }
 

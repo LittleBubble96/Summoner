@@ -56,12 +56,12 @@ namespace GameLogic.Game
         private AllEnemySpawnSceneInfos ReadEnemySpawnSceneInfos()
         {
             AllEnemySpawnSceneInfos _enemySpawnSceneInfos = new AllEnemySpawnSceneInfos();
-            _enemySpawnSceneInfos.EnemySpawnSceneInfos = new EnemySpawnSceneInfo[0];
+            _enemySpawnSceneInfos.EnemySpawnSceneInfos = new List<EnemySpawnSceneInfo>();
             var sceneInfo = new EnemySpawnSceneInfo();
             sceneInfo.ScenePos = new Vector3(-0.5f, 0, 7f);
             sceneInfo.SceneRot = Vector3.zero;
             sceneInfo.EmenySpawnId = 1;
-            _enemySpawnSceneInfos.EnemySpawnSceneInfos[0] = new EnemySpawnSceneInfo();
+            _enemySpawnSceneInfos.EnemySpawnSceneInfos.Add(sceneInfo);
             return _enemySpawnSceneInfos;
         }
     }

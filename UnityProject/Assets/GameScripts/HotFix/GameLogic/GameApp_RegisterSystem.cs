@@ -33,6 +33,7 @@ public partial class GameApp
         AddLogicSys(BuildingSystem.Instance);
         AddLogicSys(CharacterManager.Instance);
         AddLogicSys(SkillManager.Instance);
+        AddLogicSys(ProjectileManager.Instance);
         AddLogicSys(BuffManager.Instance);
         AddLogicSys(EffectManager.Instance);
     }

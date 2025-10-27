@@ -23,7 +23,7 @@ namespace GameLogic.Game
             {
                 return;
             }
-            _timerCount += dt;
+            _timerCount += dt * 1000 ;
             if (_timerCount > EnemyLevelConfig.InternalTime)
             {
                 int totalWeight = 0;
@@ -43,6 +43,7 @@ namespace GameLogic.Game
                         break;
                     }
                 }
+                _timerCount = int.MinValue;
             }
         }
 

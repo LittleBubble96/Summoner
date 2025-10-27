@@ -37,7 +37,7 @@ namespace GameLogic.Game
             ProjectileConfig config = ConfigSystem.Instance.Tables.TbProjectile.Get(projectId);
             projectile.Init(instanceId,config, position, direction ,projectileData);
             _projectiles.Add(instanceId,projectile);
-            _projectileView.CreateProjectile(projectile);
+            _projectileView?.CreateProjectile(projectile);
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace GameLogic.Game
             if (_projectiles.TryGetValue(instanceId,out var projectile))
             {
                 projectile.DestroySelf();
-                _projectileView.DestroyProjectile(instanceId);
+                _projectileView?.DestroyProjectile(instanceId);
             }
         }
 
@@ -85,7 +85,7 @@ namespace GameLogic.Game
                 {
                     _projectiles.Remove(id);
                     ReferencePool.Release(projectile);
-                    _projectileView.RealDestroyProjectile(id);
+                    _projectileView?.RealDestroyProjectile(id);
                 }
             }
         }
@@ -131,7 +131,8 @@ namespace GameLogic.Game
                 ReferencePool.Release(projectile.Value);
             }
             _projectiles.Clear();
-            _projectileView.ClearScene();
+            _projectileView?.ClearScene();
+            _projectileView = null;
             ProjectileInstanceIdGenerator.ClearCache();
         }
     }

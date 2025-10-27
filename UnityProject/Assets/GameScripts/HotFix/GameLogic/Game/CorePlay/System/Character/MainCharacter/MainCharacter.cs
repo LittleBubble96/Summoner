@@ -9,6 +9,7 @@ namespace GameLogic.Game
         {
             base.OnInit(args);
             SetMoveSpeed(4f);
+            SetHp(1,DamageSourceType.None);
         }
     }
 }

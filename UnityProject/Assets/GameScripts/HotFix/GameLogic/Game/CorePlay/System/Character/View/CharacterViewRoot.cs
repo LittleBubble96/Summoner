@@ -37,6 +37,7 @@ namespace GameLogic.Game
             GameObject role = PoolManager.Instance.GetGameObject(CharacterDefine.MainCharacterAsset,transform);
             MainCharacterView view = role.GetOrAddComponent<MainCharacterView>();
             view.Init(character);
+            CharacterViewDic.Add(character.ActorInstanceId,view);
         }
 
         public void OnCreateAICharacter(AICharacter character)
@@ -44,6 +45,9 @@ namespace GameLogic.Game
             GameObject ai = PoolManager.Instance.GetGameObject(character.RoleConfig.ResPath,transform);
             ai.transform.position = character.GetPosition();
             ai.transform.rotation = Quaternion.Euler(character.GetRotation());
+            AICharacterView view = ai.GetOrAddComponent<AICharacterView>();
+            view.Init(character);
+            CharacterViewDic.Add(character.ActorInstanceId,view);
         }
 
         #endregion

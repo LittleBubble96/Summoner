@@ -12,27 +12,19 @@ public class BTPetPreBhvTN : BTTaskNode
     protected override void OnBegin()
     {
         //获取目标
-        // TargetComponent targetComponent = behaviorTree.GetAIController().TryOrAddActorComponent<TargetComponent>();
-        // if (targetComponent == null)
-        // {
-        //     findSucc = false;
-        //     return;
-        // }
-        //
-        // if (targetComponent.TargetActorId<=0)
-        // {
-        //     findSucc = false;
-        //     return;
-        // }
-        // Actor actor = RoomManager.Instance.GetActorById(targetComponent.TargetActorId);
-        // if (actor== null)
-        // {
-        //     findSucc = false;
-        //     return;
-        // }
-        // findSucc = true;
-        //
-        // behaviorTree.GetAIController().AgentStart();
+        TargetComponent targetComponent = behaviorTree.GetOwnerCharacter().GetComponent<TargetComponent>();
+        if (targetComponent == null)
+        {
+            findSucc = false;
+            return;
+        }
+        
+        if (!targetComponent.TargetIsValid())
+        {
+            findSucc = false;
+            return;
+        }
+        findSucc = true;
     }
 
     protected override void OnEnd()

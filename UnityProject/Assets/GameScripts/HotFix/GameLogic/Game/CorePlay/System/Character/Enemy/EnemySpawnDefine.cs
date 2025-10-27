@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using GameConfig.enemyLevel;
 using UnityEngine;
 
@@ -18,6 +19,6 @@ namespace GameLogic.Game
     [Serializable]
     public class AllEnemySpawnSceneInfos
     {
-        public EnemySpawnSceneInfo[] EnemySpawnSceneInfos;
+        public List<EnemySpawnSceneInfo> EnemySpawnSceneInfos;
     }
 }

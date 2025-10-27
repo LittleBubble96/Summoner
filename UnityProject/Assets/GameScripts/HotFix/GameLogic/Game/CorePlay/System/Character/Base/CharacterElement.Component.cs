@@ -7,7 +7,7 @@ namespace GameLogic.Game
 {
     public partial class CharacterElement
     {
-        private Dictionary<Type, ActorComponent> m_ActorComponents;
+        private Dictionary<Type, ActorComponent> m_ActorComponents = new Dictionary<Type, ActorComponent>();
         
         private void RegisterComponent<T>() where T : ActorComponent , new()
         {
@@ -34,6 +34,7 @@ namespace GameLogic.Game
             {
                 ReferencePool.Release(component.Value);
             }
+            m_ActorComponents.Clear();
         }
     }
 }

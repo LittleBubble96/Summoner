@@ -175,7 +175,6 @@ namespace UnityGameFramework.Runtime
             eventCustom.Param1 = param1;
             eventCustom.Param2 = param2;
             m_EventManager.FireNow(sender, eventCustom);
-            ReferencePool.Release(eventCustom);
         }
        
     }

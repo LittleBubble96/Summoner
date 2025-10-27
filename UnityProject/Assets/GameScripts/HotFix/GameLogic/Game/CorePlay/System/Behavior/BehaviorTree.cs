@@ -15,11 +15,12 @@ public class BehaviorTree
     private AICharacter ownerCharacter;
     
     
-    public void Init(BTGenInfo info)
+    public void Init(BTGenInfo info , AICharacter aiCharacter)
     {
         this.btGenInfo = info;
         this.blackBoard = new BlackBoard();
         this.rootNode = InitTree();
+        this.ownerCharacter = aiCharacter;
     }
     
     public void Recycle()

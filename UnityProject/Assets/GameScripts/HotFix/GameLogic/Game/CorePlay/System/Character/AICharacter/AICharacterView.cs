@@ -8,17 +8,17 @@ namespace GameLogic.Game
     public class AICharacterView : CharacterBaseView
     {
         public AICharacter AICharacterData { get; set; }
-        [SerializeField] private NavMeshAgent agent;
+        private NavMeshAgent agent;
     
         protected override void OnInitCharacter()
         {
             base.OnInitCharacter();
             AICharacterData = CharacterElement as AICharacter;
+            agent = GetComponent<NavMeshAgent>();
         }
 
         protected override void DoUpdate_Internal(float dt)
         {
-            base.DoUpdate(dt);
             if (AICharacterData.IsNavToTarget)
             {
                 agent.isStopped = false;
