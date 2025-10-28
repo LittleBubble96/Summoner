@@ -56,6 +56,16 @@ namespace GameLogic.Game
         }
 
         #endregion
+
+        #region 攻击速度
+
+        public float AttackSpeed => GetFloatAttribute_Internal(CharacterAttributeType.AttackSpeed);
+        public void SetAttackSpeed(float value)
+        {
+            SetFloatAttribute_Internal(CharacterAttributeType.AttackSpeed,value);
+        }
+
+        #endregion
         
         private int GetIntAttribute_Internal(CharacterAttributeType attributeType)
         {

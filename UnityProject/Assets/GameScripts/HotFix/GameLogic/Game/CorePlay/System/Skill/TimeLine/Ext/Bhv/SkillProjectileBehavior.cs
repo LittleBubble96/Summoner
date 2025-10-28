@@ -5,7 +5,13 @@ namespace GameLogic.Game
     public class SkillProjectileBehavior : SkillBehavior
     {
         public ProjectileClipData SkillProjectileData { get; set; }
-        
+
+        protected override void OnInit()
+        {
+            StartTime = SkillProjectileData.startTime;
+            Duration = SkillProjectileData.duration;
+        }
+
         public override void OnEnter()
         {
             base.OnEnter();

@@ -4,6 +4,12 @@
     {
         public AnimationClipData AnimationData { get; set; }
 
+        protected override void OnInit()
+        {
+            StartTime = AnimationData.startTime;
+            Duration = AnimationData.duration;
+        }
+
         public override void OnEnter()
         {
             CharacterElement character = GetCharacter();

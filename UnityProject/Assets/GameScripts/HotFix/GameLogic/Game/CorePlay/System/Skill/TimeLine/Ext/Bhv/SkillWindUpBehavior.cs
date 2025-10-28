@@ -8,6 +8,13 @@ namespace GameLogic.Game
 
         private float _timer;
 
+        protected override void OnInit()
+        {
+            base.OnInit();
+            StartTime = Data.startTime;
+            Duration = Data.duration;
+        }
+
         public override void OnEnter()
         {
             base.OnEnter();

@@ -25,7 +25,10 @@ namespace GameLogic.Game
                 agent.speed = AICharacterData.MoveSpeed;
                 agent.SetDestination(AICharacterData.NavTargetPosition);
                 agent.updateRotation = AICharacterData.NavUpdateRotation;
-                AICharacterData.NavToTargetRemainDistance = agent.remainingDistance;
+                if (!agent.pathPending) //路径是否准备完毕
+                {
+                    AICharacterData.NavToTargetRemainDistance = agent.remainingDistance;
+                }
             }
             else
             {

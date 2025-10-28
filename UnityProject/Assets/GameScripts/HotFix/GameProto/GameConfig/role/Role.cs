@@ -27,6 +27,7 @@ public sealed partial class Role : Luban.BeanBase
         MaxHp = _buf.ReadInt();
         BasePhysicalAttack = _buf.ReadInt();
         AttackDistance = _buf.ReadInt();
+        AttackSpeed = _buf.ReadInt();
         DeathTime = _buf.ReadInt();
         NormalSkillId = _buf.ReadInt();
     }
@@ -81,6 +82,10 @@ public sealed partial class Role : Luban.BeanBase
     /// </summary>
     public readonly int AttackDistance;
     /// <summary>
+    /// 攻击速度
+    /// </summary>
+    public readonly int AttackSpeed;
+    /// <summary>
     /// 死亡时间（ms）
     /// </summary>
     public readonly int DeathTime;
@@ -110,6 +115,7 @@ public sealed partial class Role : Luban.BeanBase
         + "maxHp:" + MaxHp + ","
         + "basePhysicalAttack:" + BasePhysicalAttack + ","
         + "attackDistance:" + AttackDistance + ","
+        + "attackSpeed:" + AttackSpeed + ","
         + "deathTime:" + DeathTime + ","
         + "normalSkillId:" + NormalSkillId + ","
         + "}";

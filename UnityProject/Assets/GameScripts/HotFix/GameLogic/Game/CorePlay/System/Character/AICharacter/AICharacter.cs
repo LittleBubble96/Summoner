@@ -19,7 +19,6 @@ namespace GameLogic.Game
 
         protected override void OnInit(CommonArgs args)
         {
-            base.OnInit(args);
             if (args is CommonOneArgs<int> commonArgs)
             {
                 if (!ConfigSystem.Instance.Tables.TbRole.DataMap.TryGetValue(commonArgs.Arg1, out var role))
@@ -36,7 +35,6 @@ namespace GameLogic.Game
 
         protected override void OnInitAttribute()
         {
-            base.OnInitAttribute();
             if (RoleConfig == null)
             {
                 return;
@@ -45,11 +43,11 @@ namespace GameLogic.Game
             SetMoveSpeed(RoleConfig.MoveSpeed);
             SetPhysicalAttack(RoleConfig.BasePhysicalAttack);
             SetAttackDistance(RoleConfig.AttackDistance);
+            SetAttackSpeed(RoleConfig.AttackSpeed);
         }
 
         public override void DoUpdate(float dt)
         {
-            base.DoUpdate(dt);
             // 处理死亡倒计时
             if (_deathTimer > 0)
             {
