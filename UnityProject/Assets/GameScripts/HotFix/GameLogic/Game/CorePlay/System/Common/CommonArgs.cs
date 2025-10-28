@@ -19,6 +19,15 @@ namespace GameLogic.Game
             twoArgs.Arg2 = args2;
             return twoArgs;
         }
+        
+        public static CommonArgs CreateThreeArgs<T,T2,T3>(T args , T2 args2 , T3 args3)
+        {
+            CommonThreeArgs<T,T2,T3> threeArgs = ReferencePool.Acquire<CommonThreeArgs<T,T2,T3>>();
+            threeArgs.Arg1 = args;
+            threeArgs.Arg2 = args2;
+            threeArgs.Arg3 = args3;
+            return threeArgs;
+        }
 
         public virtual void Clear()
         {
@@ -50,6 +59,17 @@ namespace GameLogic.Game
         {
             base.Clear();
             Arg2 = default;
+        }
+    }
+    
+    public class CommonThreeArgs<T1, T2,T3> : CommonTwoArgs<T1,T2>
+    {
+        public T3 Arg3 { get; set; }
+
+        public override void Clear()
+        {
+            base.Clear();
+            Arg3 = default;
         }
     }
 }

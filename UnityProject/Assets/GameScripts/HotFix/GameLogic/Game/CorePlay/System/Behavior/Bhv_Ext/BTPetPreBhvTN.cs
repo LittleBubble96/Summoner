@@ -48,9 +48,8 @@ public class BTPetPreBhvTN : BTTaskNode
             return BtNodeResult.Failed;
         }
         behaviorTree.GetOwnerCharacter().NavToTarget(targetComponent.GetTargetCharacter().GetPosition());
-        float distance = Vector3.Distance(behaviorTree.GetOwnerCharacter().GetPosition(), targetComponent.GetTargetCharacter().GetPosition());
         //如果距离小于停止距离，则停止
-         if (distance < behaviorTree.GetOwnerCharacter().AttackDistance)
+         if (behaviorTree.GetOwnerCharacter().NavToTargetRemainDistance < behaviorTree.GetOwnerCharacter().AttackDistance)
          {
              behaviorTree.GetOwnerCharacter().NavToStop();
              return BtNodeResult.Succeeded;

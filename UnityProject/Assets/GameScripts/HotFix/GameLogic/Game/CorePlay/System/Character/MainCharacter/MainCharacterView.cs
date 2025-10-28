@@ -17,8 +17,8 @@ namespace GameLogic.Game
 
         protected override void OnInitCharacter()
         {
-            base.OnInitCharacter();
             MainCharacter = CharacterElement as MainCharacter;
+            m_animator = GetComponentInChildren<Animator>();
         }
 
         protected override void DoUpdate_Internal(float dt)

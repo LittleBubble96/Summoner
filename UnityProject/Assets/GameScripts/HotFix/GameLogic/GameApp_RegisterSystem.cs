@@ -36,6 +36,7 @@ public partial class GameApp
         AddLogicSys(ProjectileManager.Instance);
         AddLogicSys(BuffManager.Instance);
         AddLogicSys(EffectManager.Instance);
+        AddLogicSys(CameraManager.Instance);
     }
 
     /// <summary>

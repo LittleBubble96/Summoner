@@ -12,9 +12,9 @@ namespace GameLogic.Game
     
         protected override void OnInitCharacter()
         {
-            base.OnInitCharacter();
             AICharacterData = CharacterElement as AICharacter;
             agent = GetComponent<NavMeshAgent>();
+            m_animator = GetComponentInChildren<Animator>();
         }
 
         protected override void DoUpdate_Internal(float dt)
@@ -25,6 +25,11 @@ namespace GameLogic.Game
                 agent.speed = AICharacterData.MoveSpeed;
                 agent.SetDestination(AICharacterData.NavTargetPosition);
                 agent.updateRotation = AICharacterData.NavUpdateRotation;
+                AICharacterData.NavToTargetRemainDistance = agent.remainingDistance;
+            }
+            else
+            {
+                agent.isStopped = true;
             }
 
             if (AICharacterData.IsManualControlRotation)

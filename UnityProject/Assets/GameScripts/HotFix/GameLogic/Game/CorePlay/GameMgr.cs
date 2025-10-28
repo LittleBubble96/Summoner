@@ -37,7 +37,17 @@ namespace GameLogic.Game
             m_CurGameState = EGameState.Playing;
             UISystem.Instance.ShowUI<UICorePlay>();
             BuildingSystem.Instance.GenerateGrid();
+            CameraManager.Instance.StartScene();
             CharacterManager.Instance.InitCharacter();
+        }
+
+        private void EndGame()
+        {
+            m_CurGameState = EGameState.End;
+            UISystem.Instance.CloseUI<UICorePlay>();
+            CharacterManager.Instance.ExitCharacter();
+            CameraManager.Instance.ClearScene();
+            GameFrameworkSystem.GetModule<ISceneManager>().UnloadScene("game");
         }
     }
 }

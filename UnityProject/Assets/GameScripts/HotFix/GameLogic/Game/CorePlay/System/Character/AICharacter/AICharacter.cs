@@ -30,6 +30,7 @@ namespace GameLogic.Game
                 BehaviorTree = new BehaviorTree();
                 int aiId = FactionType == CharacterFactionType.Enemy ? RoleConfig.EmemyAi : RoleConfig.Ai;
                 BehaviorTree.Init(new BTGenInfo(aiId),this);
+                NavToTargetRemainDistance = float.MaxValue;
             }
         }
 
@@ -71,18 +72,17 @@ namespace GameLogic.Game
         }
 
         //开始导航
-        public void NavToTarget(Vector3 targetPosition,float remainDistance = 0.1f)
+        public void NavToTarget(Vector3 targetPosition)
         {
             NavTargetPosition = targetPosition;
             IsNavToTarget = true;
-            NavToTargetRemainDistance = remainDistance;
         }
 
         //停止导航
         public void NavToStop()
         {
             IsNavToTarget = false;
-            NavToTargetRemainDistance = 0;
+            NavToTargetRemainDistance = float.MaxValue;
             NavTargetPosition = Vector3.zero;
         }
         

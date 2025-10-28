@@ -6,7 +6,7 @@ namespace GameLogic.Game
 {
     public class CharacterBaseView : MonoBehaviour
     {
-        [SerializeField] protected Animator m_animator;
+        protected Animator m_animator;
         //阵营
         public CharacterElement CharacterElement { get; private set; }
         
