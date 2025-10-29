@@ -16,6 +16,7 @@
             if (character !=null && !character.IsDead())
             {
                 character.SetAnimationBool(AnimationData.clipName,true);
+                character.SetAnimationFloat("AttackSpeed",AnimationData.speed);
             }
         }
 
@@ -25,6 +26,7 @@
             if (character !=null && !character.IsDead())
             {
                 character.SetAnimationBool(AnimationData.clipName,false);
+                character.SetAnimationFloat("AttackSpeed",1);
             }
         }
     }

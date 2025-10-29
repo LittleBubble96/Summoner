@@ -55,7 +55,7 @@ namespace GameLogic.Game
             ai.SetPosition(position);
             ai.SetRotation(rotation);
             ai.Init(CommonArgs.CreateOneArgs(roleId));
-            CharacterView?.OnCreateAICharacter(ai);
+            ICharacterItemView characterView = CharacterView?.OnCreateAICharacter(ai);
             CharacterDic.Add(ai.ActorInstanceId,ai);
             return ai.ActorInstanceId;
         }

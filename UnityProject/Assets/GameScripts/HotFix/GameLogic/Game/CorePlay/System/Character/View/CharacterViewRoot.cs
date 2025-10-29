@@ -32,7 +32,7 @@ namespace GameLogic.Game
             _destroyQueue.Enqueue(actorInstanceId);
         }
 
-        public void OnCreateMainCharacter(MainCharacter character)
+        public ICharacterItemView OnCreateMainCharacter(MainCharacter character)
         {
             GameObject role = PoolManager.Instance.GetGameObject(CharacterDefine.MainCharacterAsset,transform);
             MainCharacterView view = role.GetOrAddComponent<MainCharacterView>();
@@ -40,17 +40,18 @@ namespace GameLogic.Game
             CharacterViewDic.Add(character.ActorInstanceId,view);
             CameraManager.Instance.MainCameraProxy.SetBehaviorType(CameraBehaviorType.FollowTargetSmooth);
             CameraManager.Instance.MainCameraProxy.SetBehaviorArgs(CommonArgs.CreateThreeArgs<Transform,Vector3,Quaternion>(role.transform,new Vector3(0,10,-8),Quaternion.Euler(48,0,0)));
-
+            return view;
         }
 
-        public void OnCreateAICharacter(AICharacter character)
+        public ICharacterItemView OnCreateAICharacter(AICharacter character)
         {
-            GameObject ai = PoolManager.Instance.GetGameObject(character.RoleConfig.ResPath,transform);
+            GameObject ai = PoolManager.Instance.GetGameObject(character.RoleConfig.ResPath, transform);
             ai.transform.position = character.GetPosition();
             ai.transform.rotation = Quaternion.Euler(character.GetRotation());
             AICharacterView view = ai.GetOrAddComponent<AICharacterView>();
             view.Init(character);
-            CharacterViewDic.Add(character.ActorInstanceId,view);
+            CharacterViewDic.Add(character.ActorInstanceId, view);
+            return view;
         }
 
         #endregion

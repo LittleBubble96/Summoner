@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace GameLogic.Game
 {
-    public class CharacterBaseView : MonoBehaviour
+    public class CharacterBaseView : MonoBehaviour,ICharacterItemView
     {
         protected Animator m_animator;
         //阵营
@@ -14,19 +14,7 @@ namespace GameLogic.Game
         {
             CharacterElement = character;
             CharacterElement.OnAttributeChanged += OnAttributeChanged;
-            CharacterElement.OnDie += OnDie;
-            CharacterElement.OnDieComplete += DeathComplete;
             OnInitCharacter();
-        }
-
-        private void OnEnable()
-        {
-            XYEvent.GEvent.Subscribe(EventDefine.CharacterAnimationSetBoolEventName,OnAnimationSetBool);
-        }
-
-        private void OnDisable()
-        {
-            XYEvent.GEvent.Unsubscribe(EventDefine.CharacterAnimationSetBoolEventName,OnAnimationSetBool);
         }
 
         protected virtual void OnInitCharacter()
@@ -38,24 +26,7 @@ namespace GameLogic.Game
         {
             DoUpdate_Internal(dt);
         }
-
-        private void OnAnimationSetBool(object sender, GameEventArgs eventArgs)
-        {
-            if (!m_animator)
-            {
-                return;
-            }
-            if (eventArgs is GameEventCustomThreeParam<ActorInstanceId,string,bool> args)
-            {
-                if (CharacterElement.ActorInstanceId != args.Param)
-                {
-                    return;
-                }
-                m_animator.SetBool(args.Param1,args.Param2);
-            }
-        }
         
-
         protected virtual void DoUpdate_Internal(float dt)
         {
             
@@ -68,15 +39,35 @@ namespace GameLogic.Game
         }
         
         //死亡回调
-        protected virtual void OnDie(CommonArgs args)
+        public virtual void Death()
         {
             
         }
         
         //死亡完成回调
-        protected virtual void DeathComplete(CommonArgs args)
+        public virtual void DeathComplete()
         {
             
         }
+
+        #region 动画
+
+        public virtual void SetAnimationBool(string param, bool value)
+        {
+            if (m_animator)
+            {
+                m_animator.SetBool(param,value);
+            }
+        }
+        
+        public virtual void SetAnimationFloat(string param, float value)
+        {
+            if (m_animator)
+            {
+                m_animator.SetFloat(param,value);
+            }
+        }
+
+        #endregion
     }
 }

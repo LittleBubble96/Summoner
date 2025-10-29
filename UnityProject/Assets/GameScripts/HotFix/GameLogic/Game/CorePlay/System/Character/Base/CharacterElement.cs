@@ -23,16 +23,22 @@ namespace GameLogic.Game
 
         #region 回调
 
-        public Action<CommonArgs> OnDie { get; set; }
         public Action<CommonArgs> OnDieComplete { get; set; }
 
         #endregion
+        
+        protected ICharacterItemView m_CharacterView;
 
         public void Init(CommonArgs args)
         {
             OnInit(args);
             OnInitAttribute();
             RegisterActorComponent();
+        }
+        
+        public void InjectView(ICharacterItemView characterView)
+        {
+            m_CharacterView = characterView;
         }
         
         protected virtual void OnInit(CommonArgs args)
@@ -67,12 +73,12 @@ namespace GameLogic.Game
 
         public virtual void Death()
         {
-            OnDie?.Invoke(CommonArgs.CreateOneArgs(this.ActorInstanceId));
+            m_CharacterView?.Death();
         }
         
         public virtual void DeathComplete()
         {
-            OnDieComplete?.Invoke(CommonArgs.CreateOneArgs(this.ActorInstanceId));
+            m_CharacterView?.DeathComplete();
             CharacterManager.Instance.DestroyCharacter(ActorInstanceId);
         }
 
@@ -116,10 +122,14 @@ namespace GameLogic.Game
 
         public void SetAnimationBool(string animName , bool value)
         {
-            XYEvent.GEvent.FireNow(this,EventDefine.CharacterAnimationSetBoolEventName,this.ActorInstanceId,animName,value);
+            m_CharacterView?.SetAnimationBool(animName, value);
         }
         
-
+        public void SetAnimationFloat(string animName , float value)
+        {
+            m_CharacterView?.SetAnimationFloat(animName, value);
+        }
+        
         #endregion
 
 
@@ -130,8 +140,6 @@ namespace GameLogic.Game
             FactionType = CharacterFactionType.Player;
             AttributeDic.Clear();
             OnAttributeChanged = null;
-            OnDie = null;
-            OnDieComplete = null;
             ClearComponent();
         }
     }
