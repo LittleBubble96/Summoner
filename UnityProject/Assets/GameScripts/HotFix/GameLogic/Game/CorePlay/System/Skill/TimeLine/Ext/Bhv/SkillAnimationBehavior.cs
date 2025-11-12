@@ -29,6 +29,12 @@
                 character.SetAnimationFloat("AttackSpeed",1);
             }
         }
+
+        public override void Clear()
+        {
+            base.Clear();
+            AnimationData = null;
+        }
     }
 
 }

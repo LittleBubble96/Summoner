@@ -40,6 +40,7 @@ namespace GameLogic.Game
             StartTime = 0;
             Duration = 0;
             State = BehaviorState.Ready;
+            OwnerActorInstanceId = default;
         }
 
         #region 其他

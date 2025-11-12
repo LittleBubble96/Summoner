@@ -57,6 +57,7 @@ namespace GameLogic.Game
             ai.Init(CommonArgs.CreateOneArgs(roleId));
             ICharacterItemView characterView = CharacterView?.OnCreateAICharacter(ai);
             CharacterDic.Add(ai.ActorInstanceId,ai);
+            ai.InjectView(characterView);
             return ai.ActorInstanceId;
         }
 

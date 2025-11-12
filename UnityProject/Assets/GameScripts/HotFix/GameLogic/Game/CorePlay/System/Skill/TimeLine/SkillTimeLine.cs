@@ -25,41 +25,41 @@ namespace GameLogic.Game
             foreach (var t in skillData.animationTracks)
             {
                 AnimationTrack animationTrack = ReferencePool.Acquire<AnimationTrack>();
+                SetTrack(animationTrack);
                 foreach (var animationClip in t.clips)
                 {
                     animationTrack.AddBehavior(animationClip);
                 }
-                SetTrack(animationTrack);
             }
             //发射物轨道
             foreach (var t in skillData.projectileTracks)
             {
                 ProjectileTrack projectileTrack = ReferencePool.Acquire<ProjectileTrack>();
+                SetTrack(projectileTrack);
                 foreach (var projectileClip in t.ProjectileClipDatas)
                 {
                     projectileTrack.AddBehavior(projectileClip);
                 }
-                SetTrack(projectileTrack);
             }
             //前摇轨道
             foreach (var t in skillData.skillWindUpTracks)
             {
                 SkillWindUpTrack windUpTrack = ReferencePool.Acquire<SkillWindUpTrack>();
+                SetTrack(windUpTrack);
                 foreach (var windUpClip in t.clipDatas)
                 {
                     windUpTrack.AddBehavior(windUpClip);
                 }
-                SetTrack(windUpTrack);
             }
             //后摇轨道
             foreach (var t in skillData.skillWindDownTracks)
             {
                 SkillWindDownTrack windDownTrack = ReferencePool.Acquire<SkillWindDownTrack>();
+                SetTrack(windDownTrack);
                 foreach (var windDownClip in t.clipDatas)
                 {
                     windDownTrack.AddBehavior(windDownClip);
                 }
-                SetTrack(windDownTrack);
             }
         }
 

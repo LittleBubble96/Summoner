@@ -61,6 +61,7 @@ namespace GameLogic.Game
                 ReferencePool.Release(behavior);
             }
             Behaviors.Clear();
+            _ownerActorInstanceId = default;
         }
     }
 }
