@@ -44,6 +44,16 @@ namespace GameLogic.Game
             SetIntAttribute_Internal(CharacterAttributeType.PhysicalBasicAttack,value);
         }
         #endregion
+        
+        #region 物理攻击
+
+        public int MagicAttack => GetIntAttribute_Internal(CharacterAttributeType.MagicBasicAttack); 
+      
+        public void SetMagicAttack(int value)
+        {
+            SetIntAttribute_Internal(CharacterAttributeType.MagicBasicAttack,value);
+        }
+        #endregion
 
 
         #region 攻击距离
