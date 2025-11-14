@@ -25,6 +25,9 @@ public sealed partial class ProjectileConfig : Luban.BeanBase
         ProjectileRes = _buf.ReadString();
         Speed = _buf.ReadFloat();
         Gravity = _buf.ReadFloat();
+        DamageSource = _buf.ReadInt();
+        DamageType = _buf.ReadInt();
+        DamageInternal = _buf.ReadInt();
     }
 
     public static ProjectileConfig DeserializeProjectileConfig(ByteBuf _buf)
@@ -68,6 +71,18 @@ public sealed partial class ProjectileConfig : Luban.BeanBase
     /// 重力
     /// </summary>
     public readonly float Gravity;
+    /// <summary>
+    /// 伤害来源
+    /// </summary>
+    public readonly int DamageSource;
+    /// <summary>
+    /// 伤害类型
+    /// </summary>
+    public readonly int DamageType;
+    /// <summary>
+    /// 伤害间隔(ms)
+    /// </summary>
+    public readonly int DamageInternal;
    
     public const int __ID__ = -573459440;
     public override int GetTypeId() => __ID__;
@@ -88,6 +103,9 @@ public sealed partial class ProjectileConfig : Luban.BeanBase
         + "ProjectileRes:" + ProjectileRes + ","
         + "Speed:" + Speed + ","
         + "Gravity:" + Gravity + ","
+        + "DamageSource:" + DamageSource + ","
+        + "DamageType:" + DamageType + ","
+        + "DamageInternal:" + DamageInternal + ","
         + "}";
     }
 }

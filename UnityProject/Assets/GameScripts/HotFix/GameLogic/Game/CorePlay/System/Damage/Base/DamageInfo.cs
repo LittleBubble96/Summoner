@@ -10,10 +10,11 @@ namespace GameLogic.Game
         private Dictionary<ActorInstanceId, DamageData> _damageTargets;
         private Queue<ActorInstanceId> _destroyQueue;
 
-        public void InitDamage(ActorInstanceId owner,DamageSourceType sourceType ,DamageType damageType ,float internalTime)
+        public void InitDamage(uint damageId , ActorInstanceId owner,DamageSourceType sourceType ,DamageType damageType ,float internalTime)
         {
             DamageInfo = new DamageInfo()
             {
+                DamageId = damageId,
                 DamageSourceActorId = owner,
                 DamageSourceType = sourceType,
                 DamageType = damageType,
@@ -49,15 +50,20 @@ namespace GameLogic.Game
             }
         }
 
-        public void DamageTarget(ActorInstanceId target,DamageSourceType sourceType ,DamageType damageType)
+        public bool CanDamageTarget(ActorInstanceId target)
         {
-            if (_damageTargets.ContainsKey(target))
+            return !_damageTargets.ContainsKey(target);
+        }
+
+        public void DamageTarget(ActorInstanceId target)
+        {
+            if (!CanDamageTarget(target))
             {
                 //还在作用时间内 无伤害
                 return;
             }
             //立即执行
-            CharacterManager.Instance.DamageCharacter(target,DamageHelper.CalDamageValue(target,sourceType,damageType),sourceType);
+            CharacterManager.Instance.DamageCharacter(target,DamageHelper.CalDamageValue(target,DamageInfo.DamageSourceType,DamageInfo.DamageType),DamageInfo.DamageSourceType);
             DamageData damageData = ReferencePool.Acquire<DamageData>();
             damageData.Init(DamageInfo.DamageInternal);
             _damageTargets.Add(target,damageData);
@@ -108,8 +114,8 @@ namespace GameLogic.Game
 
     public enum DamageType
     {
-        Damage,//伤害
-        Treat,//治疗
+        Damage = 1 << 0,//伤害
+        Treat = 2 << 0,//治疗
     }
 
 }

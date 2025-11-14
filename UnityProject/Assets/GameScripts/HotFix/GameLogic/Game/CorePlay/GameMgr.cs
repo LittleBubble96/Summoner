@@ -47,6 +47,7 @@ namespace GameLogic.Game
             UISystem.Instance.CloseUI<UICorePlay>();
             CharacterManager.Instance.ExitCharacter();
             CameraManager.Instance.ClearScene();
+            ProjectileManager.Instance.ClearScene();
             GameFrameworkSystem.GetModule<ISceneManager>().UnloadScene("game");
         }
     }

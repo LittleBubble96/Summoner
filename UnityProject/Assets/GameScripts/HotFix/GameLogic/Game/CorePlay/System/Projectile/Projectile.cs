@@ -29,10 +29,16 @@ namespace GameLogic.Game
         
         //子弹位移id
         public ProjectileInstanceId InstanceId { get; set; }
+        
+        //子弹伤害id
+        public uint DamageId { get; set; }
 
         public void Init(ProjectileInstanceId instanceId ,ProjectileConfig projectileConfig, Vector3 position , Vector3 direction , ProjectileData projectileData)
         {
             InstanceId = instanceId;
+            DamageId = DamageManger.Instance.CreateDamageIns(ProjectileData.OwnerId,
+                (DamageSourceType)ProjectileConfig.DamageSource, (DamageType)ProjectileConfig.DamageType,
+                ProjectileConfig.DamageInternal / 1000f);
             CreateBehavior(projectileConfig.MoveType,position,direction,projectileConfig);
             ProjectileConfig = projectileConfig;
             ProjectileData = projectileData;

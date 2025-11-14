@@ -109,6 +109,12 @@ namespace GameLogic.Game
             {
                 return false;
             }
+
+            //如果在伤害作用间隔内 则不能攻击
+            if (!DamageManger.Instance.CanDamage(projectile.DamageId , characterElement.ActorInstanceId))
+            {
+                return false;
+            }
             FactionRelationType relation = CharacterManager.Instance.GetRelation(characterElement, owner);
             return relation == FactionRelationType.Hostile;
         }
@@ -120,6 +126,7 @@ namespace GameLogic.Game
             {
                 return;
             }
+            DamageManger.Instance.Damage(projectile.DamageId, characterElement.ActorInstanceId);
             _projectileView?.PlayProjectileHit(projectileInstanceId,hitInfo);
         }
 
