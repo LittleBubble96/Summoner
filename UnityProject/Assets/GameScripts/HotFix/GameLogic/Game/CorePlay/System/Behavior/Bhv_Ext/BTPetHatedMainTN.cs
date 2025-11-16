@@ -5,7 +5,7 @@ using UnityEngine;
 public class BTPetHatedMainTN : BTTaskNode
 {
     //如果找不到的时间间隔 
-    private float findTargetInterval = 1f;
+    private float findTargetInterval = 0.1f;
     private float findTargetTime = 0;
     protected override void OnRecycle()
     {

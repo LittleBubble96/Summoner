@@ -20,7 +20,7 @@ namespace GameLogic.Game
             {
                 return;
             }
-            Vector3 worldPos = characterElement.GetPosition() + SkillProjectileData.position;
+            Vector3 worldPos = characterElement.GetPosition() +  Quaternion.Euler(0,characterElement.GetRotation().y,0) * SkillProjectileData.position;
             Quaternion worldRot = Quaternion.Euler(SkillProjectileData.rotation) * Quaternion.Euler(0,characterElement.GetRotation().y,0);
             ProjectileManager.Instance.CreateProjectile<Projectile>(
                 SkillProjectileData.projectileId,worldPos,worldRot * Vector3.forward,OwnerActorInstanceId);

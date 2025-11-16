@@ -116,6 +116,30 @@ namespace GameLogic.Game
                     }
                     skillData.skillWindDownTracks.Add(trackData);
                 }
+                //读取范围轨道
+                int areaCount = byteArray.ReadInt();
+                for (int i = 0; i < areaCount; i++)
+                {
+                    AreaTrackData trackData = new AreaTrackData();
+                    int clipCount = byteArray.ReadInt();
+                    for (int j = 0; j < clipCount; j++)
+                    {
+                        AreaData clipData = new AreaData();
+                        clipData.startTime = byteArray.ReadFloat();
+                        clipData.duration = byteArray.ReadFloat();
+                        clipData.areaType = (AreaType)(byteArray.ReadInt());
+                        byteArray.ReadVector3(out var originX, out var originY, out var originZ);
+                        clipData.origin = new Vector3(originX, originY, originZ);
+                        clipData.radius = byteArray.ReadFloat();
+                        byteArray.ReadVector3(out var boxSizeX, out var boxSizeY, out var boxSizeZ);
+                        clipData.boxSize = new Vector3(boxSizeX, boxSizeY, boxSizeZ);
+                        clipData.sectorAngle = byteArray.ReadFloat();
+                        byteArray.ReadVector3(out var directionX, out var directionY, out var directionZ);
+                        clipData.direction = new Vector3(directionX, directionY, directionZ);
+                        trackData.clipDatas.Add(clipData);
+                    }
+                    skillData.areaTracks.Add(trackData);
+                }
         }
 
         public static void Write(int skillId , SkillData skillData)
@@ -173,6 +197,23 @@ namespace GameLogic.Game
                     {
                         byteArray.WriteFloat(windDownClip.startTime);
                         byteArray.WriteFloat(windDownClip.duration);
+                    }
+                }
+                //写入范围轨道
+                byteArray.WriteInt(skillData.areaTracks.Count);
+                foreach (var areaTrack in skillData.areaTracks)
+                {
+                    byteArray.WriteInt(areaTrack.clipDatas.Count);
+                    foreach (var clip in areaTrack.clipDatas)
+                    {
+                        byteArray.WriteFloat(clip.startTime);
+                        byteArray.WriteFloat(clip.duration);
+                        byteArray.WriteInt((int)clip.areaType);
+                        byteArray.WriteVector3(clip.origin.x,clip.origin.y,clip.origin.z);
+                        byteArray.WriteFloat(clip.radius);
+                        byteArray.WriteVector3(clip.boxSize.x,clip.boxSize.y,clip.boxSize.z);
+                        byteArray.WriteFloat(clip.sectorAngle);
+                        byteArray.WriteVector3(clip.direction.x,clip.direction.y,clip.direction.z);
                     }
                 }
                 string fullPath = GetSkillDataPath(skillId);

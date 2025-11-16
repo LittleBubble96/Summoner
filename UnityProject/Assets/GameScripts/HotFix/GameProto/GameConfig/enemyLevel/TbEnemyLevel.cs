@@ -19,13 +19,13 @@ public partial class TbEnemyLevel
     
     public TbEnemyLevel(ByteBuf _buf)
     {
-        _dataMap = new System.Collections.Generic.Dictionary<int, enemyLevel.EnemyLevelConfig>();
-        _dataList = new System.Collections.Generic.List<enemyLevel.EnemyLevelConfig>();
-        
-        for(int n = _buf.ReadSize() ; n > 0 ; --n)
+        int n = _buf.ReadSize();
+        _dataMap = new System.Collections.Generic.Dictionary<int, enemyLevel.EnemyLevelConfig>(n);
+        _dataList = new System.Collections.Generic.List<enemyLevel.EnemyLevelConfig>(n);
+        for(int i = n ; i > 0 ; --i)
         {
             enemyLevel.EnemyLevelConfig _v;
-            _v = enemyLevel.EnemyLevelConfig.DeserializeEnemyLevelConfig(_buf);
+            _v = global::GameConfig.enemyLevel.EnemyLevelConfig.DeserializeEnemyLevelConfig(_buf);
             _dataList.Add(_v);
             _dataMap.Add(_v.Id, _v);
         }
@@ -34,7 +34,7 @@ public partial class TbEnemyLevel
     public System.Collections.Generic.Dictionary<int, enemyLevel.EnemyLevelConfig> DataMap => _dataMap;
     public System.Collections.Generic.List<enemyLevel.EnemyLevelConfig> DataList => _dataList;
 
-    public enemyLevel.EnemyLevelConfig GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
+    public enemyLevel.EnemyLevelConfig GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : default;
     public enemyLevel.EnemyLevelConfig Get(int key) => _dataMap[key];
     public enemyLevel.EnemyLevelConfig this[int key] => _dataMap[key];
 

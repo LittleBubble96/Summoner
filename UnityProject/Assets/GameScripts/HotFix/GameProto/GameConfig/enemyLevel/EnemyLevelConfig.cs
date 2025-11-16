@@ -18,8 +18,8 @@ public sealed partial class EnemyLevelConfig : Luban.BeanBase
     {
         Id = _buf.ReadInt();
         Desc = _buf.ReadString();
-        {int __n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);EmemyWeight = new int[__n0];for(var __index0 = 0 ; __index0 < __n0 ; __index0++) { int __e0;__e0 = _buf.ReadInt(); EmemyWeight[__index0] = __e0;}}
-        {int __n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);EmemyIds = new int[__n0];for(var __index0 = 0 ; __index0 < __n0 ; __index0++) { int __e0;__e0 = _buf.ReadInt(); EmemyIds[__index0] = __e0;}}
+        {int __n0 = _buf.ReadSize(); EmemyWeight = new int[__n0];for(var __index0 = 0 ; __index0 < __n0 ; __index0++) { int __e0;__e0 = _buf.ReadInt(); EmemyWeight[__index0] = __e0;}}
+        {int __n0 = _buf.ReadSize(); EmemyIds = new int[__n0];for(var __index0 = 0 ; __index0 < __n0 ; __index0++) { int __e0;__e0 = _buf.ReadInt(); EmemyIds[__index0] = __e0;}}
         InternalTime = _buf.ReadInt();
     }
 
@@ -67,6 +67,5 @@ public sealed partial class EnemyLevelConfig : Luban.BeanBase
         + "}";
     }
 }
-
 }
 

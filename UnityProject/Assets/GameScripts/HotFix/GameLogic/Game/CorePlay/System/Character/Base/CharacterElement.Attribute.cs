@@ -58,11 +58,11 @@ namespace GameLogic.Game
 
         #region 攻击距离
 
-        public int AttackDistance => GetIntAttribute_Internal(CharacterAttributeType.AttackDistance);
+        public float AttackDistance => GetFloatAttribute_Internal(CharacterAttributeType.AttackDistance);
 
-        public void SetAttackDistance(int value)
+        public void SetAttackDistance(float value)
         {
-            SetIntAttribute_Internal(CharacterAttributeType.AttackDistance,value);
+            SetFloatAttribute_Internal(CharacterAttributeType.AttackDistance,value);
         }
 
         #endregion

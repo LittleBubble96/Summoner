@@ -39,6 +39,8 @@ namespace GameLogic.Game
             BuildingSystem.Instance.GenerateGrid();
             CameraManager.Instance.StartScene();
             CharacterManager.Instance.InitCharacter();
+            ProjectileManager.Instance.Inject(new ProjectileView());
+            ProjectileManager.Instance.StartScene();
         }
 
         private void EndGame()

@@ -25,6 +25,11 @@ namespace GameLogic.Game
             _projectileView = projectileView;
         }
 
+        public void StartScene()
+        {
+            _projectileView?.StartScene();
+        }
+
         /// <summary>
         /// 创建子弹
         /// </summary>
@@ -104,6 +109,11 @@ namespace GameLogic.Game
             {
                 return false;
             }
+
+            if (projectile.ProjectileData.OwnerId == characterElement.ActorInstanceId)
+            {
+                return false;
+            }
             CharacterElement owner = CharacterManager.Instance.GetCharacter(projectile.ProjectileData.OwnerId);
             if (owner == null)
             {
@@ -126,8 +136,9 @@ namespace GameLogic.Game
             {
                 return;
             }
-            DamageManger.Instance.Damage(projectile.DamageId, characterElement.ActorInstanceId);
+            // DamageManger.Instance.Damage(projectile.DamageId, characterElement.ActorInstanceId);
             _projectileView?.PlayProjectileHit(projectileInstanceId,hitInfo);
+            DestroyProjectile(projectileInstanceId);
         }
 
         //清除场景

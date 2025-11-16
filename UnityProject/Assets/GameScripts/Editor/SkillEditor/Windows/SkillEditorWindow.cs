@@ -126,7 +126,7 @@ public class SkillEditorWindow : EditorWindow
                         clipData.clipName = animClip.animationClip != null ? animClip.animationClip.name : "";
                         clipData.startTime = (float)clip.start;
                         clipData.duration = (float)clip.duration;
-                        clipData.speed = animClip.template.speed;
+                        clipData.speed = animClip.speed;
                         clipData.loop = animClip.template.loop;
                         
                         animData.clips.Add(clipData);
@@ -191,6 +191,29 @@ public class SkillEditorWindow : EditorWindow
                     }
                 }
                 skillData.skillWindDownTracks.Add(trackData);
+            }
+            else if (track is AreaParameterTrack areaParameterTrack)
+            {
+                AreaTrackData trackData = new AreaTrackData();
+                trackData.trackName = track.name;
+                
+                foreach (var clip in track.GetClips())
+                {
+                    AreaParameterClip clipViewData = clip.asset as AreaParameterClip;
+                    if (clipViewData != null)
+                    {
+                        AreaData clipData = new AreaData();
+                        clipData.startTime = (float)clip.start;
+                        clipData.duration = (float)clip.duration;
+                        clipData.areaType = clipViewData.AreaType;
+                        clipData.direction = clipViewData.Direction;
+                        clipData.origin = clipViewData.Origin;
+                        clipData.radius = clipViewData.Radius;
+                        clipData.sectorAngle = clipViewData.SectorAngle;
+                        trackData.clipDatas.Add(clipData);
+                    }
+                }
+                skillData.areaTracks.Add(trackData);
             }
         }
         SkillDataParse.Write(skillName,skillData);

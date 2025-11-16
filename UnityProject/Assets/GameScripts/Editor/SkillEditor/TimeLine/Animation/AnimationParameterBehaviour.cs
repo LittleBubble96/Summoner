@@ -40,6 +40,5 @@ public class AnimationParameterBehaviour : PlayableBehaviour
         AnimationMode.StartAnimationMode();
         AnimationMode.SampleAnimationClip(animator.gameObject, animationClip, time / animationClip.length);
         animator.Play(clipHash, -1, time / animationClip.length);
-        animator.speed = speed;
     }
 }

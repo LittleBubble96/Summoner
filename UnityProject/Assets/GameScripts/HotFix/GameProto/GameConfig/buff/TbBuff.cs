@@ -19,13 +19,13 @@ public partial class TbBuff
     
     public TbBuff(ByteBuf _buf)
     {
-        _dataMap = new System.Collections.Generic.Dictionary<int, buff.BuffConfig>();
-        _dataList = new System.Collections.Generic.List<buff.BuffConfig>();
-        
-        for(int n = _buf.ReadSize() ; n > 0 ; --n)
+        int n = _buf.ReadSize();
+        _dataMap = new System.Collections.Generic.Dictionary<int, buff.BuffConfig>(n);
+        _dataList = new System.Collections.Generic.List<buff.BuffConfig>(n);
+        for(int i = n ; i > 0 ; --i)
         {
             buff.BuffConfig _v;
-            _v = buff.BuffConfig.DeserializeBuffConfig(_buf);
+            _v = global::GameConfig.buff.BuffConfig.DeserializeBuffConfig(_buf);
             _dataList.Add(_v);
             _dataMap.Add(_v.Id, _v);
         }
@@ -34,7 +34,7 @@ public partial class TbBuff
     public System.Collections.Generic.Dictionary<int, buff.BuffConfig> DataMap => _dataMap;
     public System.Collections.Generic.List<buff.BuffConfig> DataList => _dataList;
 
-    public buff.BuffConfig GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
+    public buff.BuffConfig GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : default;
     public buff.BuffConfig Get(int key) => _dataMap[key];
     public buff.BuffConfig this[int key] => _dataMap[key];
 

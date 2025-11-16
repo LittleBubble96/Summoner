@@ -40,6 +40,7 @@ namespace GameLogic.Game
             uint damageId = DamageIdGenerator.NewId();
             DamageElement damageElement = ReferencePool.Acquire<DamageElement>();
             damageElement.InitDamage(damageId,owner , damageSourceType ,damageType ,internalTime);
+            DamageElements.Add(damageId,damageElement);
             return damageId;
         }
 

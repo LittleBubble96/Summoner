@@ -18,6 +18,7 @@ namespace GameLogic.Game
         public override void OnEnter()
         {
             base.OnEnter();
+            _timer = Duration;
         }
 
         public override void OnUpdate(float dt, float currentTime)
@@ -35,7 +36,10 @@ namespace GameLogic.Game
                     if (direction.sqrMagnitude > 0.001f)
                     {
                         Quaternion targetRotation = Quaternion.LookRotation(direction.normalized);
+                        float t = 1 - _timer / Duration;
+                        targetRotation = Quaternion.Lerp(Quaternion.Euler(characterElement.GetRotation()), targetRotation ,t );
                         characterElement.ManualControlRotationStart(targetRotation.eulerAngles);
+                        _timer -= dt;
                     }
                 }
             }

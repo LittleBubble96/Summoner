@@ -4,6 +4,7 @@ namespace GameLogic.Game
 {
     public interface IProjectileView
     {
+        void StartScene();
         void CreateProjectile(Projectile projectile);
 
         void DoUpdate(float dt);

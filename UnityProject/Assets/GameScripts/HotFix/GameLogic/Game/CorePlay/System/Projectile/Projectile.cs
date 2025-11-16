@@ -36,13 +36,13 @@ namespace GameLogic.Game
         public void Init(ProjectileInstanceId instanceId ,ProjectileConfig projectileConfig, Vector3 position , Vector3 direction , ProjectileData projectileData)
         {
             InstanceId = instanceId;
-            DamageId = DamageManger.Instance.CreateDamageIns(ProjectileData.OwnerId,
-                (DamageSourceType)ProjectileConfig.DamageSource, (DamageType)ProjectileConfig.DamageType,
-                ProjectileConfig.DamageInternal / 1000f);
             CreateBehavior(projectileConfig.MoveType,position,direction,projectileConfig);
             ProjectileConfig = projectileConfig;
             ProjectileData = projectileData;
             State = ProjectileState.Running;
+            DamageId = DamageManger.Instance.CreateDamageIns(ProjectileData.OwnerId,
+                (DamageSourceType)ProjectileConfig.DamageSource, (DamageType)ProjectileConfig.DamageType,
+                ProjectileConfig.DamageInternal / 1000f);
         }
 
         public void DoUpdate(float dt)

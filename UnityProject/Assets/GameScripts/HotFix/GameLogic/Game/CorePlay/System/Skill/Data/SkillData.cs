@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using GameLogic.Game;
 using UnityEngine;
 
 [Serializable]
@@ -14,6 +15,8 @@ public class SkillData
     public List<SkillWindUpTrackData> skillWindUpTracks = new List<SkillWindUpTrackData>();
     //后摇数据
     public List<SkillWindDownTrackData> skillWindDownTracks = new List<SkillWindDownTrackData>();
+    //范围数据
+    public List<AreaTrackData> areaTracks = new List<AreaTrackData>();
 }
 
 [Serializable]
@@ -138,4 +141,28 @@ public class SkillWindDownData : SkillBehaviorData
 {
     public float startTime;
     public float duration;
+}
+
+//范围数据
+[Serializable]
+public class AreaTrackData : TrackDataBase
+{
+    public List<AreaData> clipDatas = new List<AreaData>();
+}
+
+[Serializable]
+public class AreaData : SkillBehaviorData
+{
+    public float startTime;
+    public float duration;
+    public AreaType areaType;
+
+    public Vector3 origin;
+    // 球形/扇形共用参数
+    public float radius;
+    // 盒形参数
+    public Vector3 boxSize;
+    // 扇形专属参数
+    public float sectorAngle; // 角度（0-360）
+    public Vector3 direction; // 朝向
 }

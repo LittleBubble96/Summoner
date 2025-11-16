@@ -8,11 +8,30 @@ namespace GameLogic.Game
         private Dictionary<ProjectileInstanceId, ProjectItemView> _projectileViews =
             new Dictionary<ProjectileInstanceId, ProjectItemView>();
 
+        private Transform _parent;
+
         #region 接口
+
+        public void StartScene()
+        {
+            if (!_parent)
+            {
+                var obj  = GameObject.Find("Logic/projectileViewRoot");
+                if (obj)
+                {
+                    _parent = obj.transform;
+                }
+                else
+                {
+                    obj = new GameObject("Logic/projectileViewRoot");
+                    _parent = obj.transform;
+                }
+            }
+        }
 
         public void CreateProjectile(Projectile projectile)
         {
-            GameObject projectileObj = PoolManager.Instance.GetGameObject(projectile.ProjectileConfig.ProjectileRes);
+            GameObject projectileObj = PoolManager.Instance.GetGameObject(projectile.ProjectileConfig.ProjectileRes,_parent);
             ProjectItemView projectileView = projectileObj.GetComponent<ProjectItemView>();
             if (projectileView == null)
             {
@@ -42,6 +61,7 @@ namespace GameLogic.Game
             if (_projectileViews.TryGetValue(instanceId,out var projectileView))
             {
                 PoolManager.Instance.PushObject(projectileView);
+                projectileView.gameObject.SetActive(false);
                 _projectileViews.Remove(instanceId);
             }
         }

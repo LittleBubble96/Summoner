@@ -1,4 +1,5 @@
 ﻿using GameFramework.Event;
+using GameLogic.Game.Common;
 using UnityEngine;
 
 namespace GameLogic.Game
@@ -8,13 +9,15 @@ namespace GameLogic.Game
         private RectTransform m_downInput;
         private RectTransform m_dirInput;
         private float m_maxRadius = 200f;
+        private XYButton m_button;
         protected override void ScriptGenerator()
         {
             base.ScriptGenerator();
             m_downInput = FindChildComponent<RectTransform>("Bg/InputView/m_downInput");
             m_dirInput = FindChildComponent<RectTransform>("Bg/InputView/m_dirInput");
+            m_button = CreateWidget<XYButton>("Bg/test_button/m_createBtn");
         }
-
+        
         protected override void OnRefresh()
         {
             base.OnRefresh();
@@ -28,6 +31,12 @@ namespace GameLogic.Game
             XYEvent.GEvent.Subscribe(EventDefine.PlayerControllerDownEventName, OnPlayerControllerDown);
             XYEvent.GEvent.Subscribe(EventDefine.PlayerControllerUpEventName, OnPlayerControllerUp);
             XYEvent.GEvent.Subscribe(EventDefine.PlayerControllerDragEventName, OnPlayerControllerDrag);
+            m_button.AddListener(OnClickCreateBtn);
+        }
+
+        private void OnClickCreateBtn()
+        {
+            CharacterManager.Instance.CreateAICharacter(1001, Vector3.zero, Vector3.zero, CharacterFactionType.Player);
         }
 
         private void OnPlayerControllerDrag(object sender, GameEventArgs e)

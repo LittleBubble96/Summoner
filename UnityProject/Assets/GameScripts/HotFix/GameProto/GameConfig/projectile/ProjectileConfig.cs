@@ -109,6 +109,5 @@ public sealed partial class ProjectileConfig : Luban.BeanBase
         + "}";
     }
 }
-
 }
 
