@@ -13,7 +13,10 @@ namespace GameLogic.Game
             // 设置位置和旋转
             transform.position = position;
             transform.rotation = rotation;
-            transform.parent = parent;
+            if (parent)
+            {
+                transform.parent = parent;
+            }
         
             // 调用基类初始化
             base.Initialize(autoRecycleTime, onRecycleCallback);

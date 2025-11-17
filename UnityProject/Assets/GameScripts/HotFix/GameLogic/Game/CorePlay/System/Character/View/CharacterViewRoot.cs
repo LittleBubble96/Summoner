@@ -64,7 +64,7 @@ namespace GameLogic.Game
                 if (CharacterViewDic.TryGetValue(actorInstanceId,out CharacterBaseView view))
                 {
                     CharacterViewDic.Remove(actorInstanceId);
-                    PoolManager.Instance.PushObject(view);
+                    PoolManager.Instance.PushGameObject(view.gameObject);
                 }
             }
         }

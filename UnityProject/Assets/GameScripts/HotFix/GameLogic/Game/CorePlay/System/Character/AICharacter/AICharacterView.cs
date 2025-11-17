@@ -15,6 +15,12 @@ namespace GameLogic.Game
             AICharacterData = CharacterElement as AICharacter;
             agent = GetComponent<NavMeshAgent>();
             m_animator = GetComponentInChildren<Animator>();
+            if (AICharacterData != null)
+            {
+                AICharacterData.SetAnimationBool("Death", false);
+                AICharacterData.SetAnimationBool("Attack", false);
+                AICharacterData.SetAnimationBool("Damage", false);
+            }
         }
 
         protected override void DoUpdate_Internal(float dt)
@@ -50,6 +56,12 @@ namespace GameLogic.Game
             }
             CharacterElement.SetPosition(transform.position);
             CharacterElement.SetRotation(transform.eulerAngles);
+        }
+
+        public override void Death()
+        {
+            base.Death();
+            AICharacterData.SetAnimationBool("Death",true);
         }
     }
 }

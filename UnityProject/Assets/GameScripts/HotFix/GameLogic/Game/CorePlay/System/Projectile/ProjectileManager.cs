@@ -136,7 +136,7 @@ namespace GameLogic.Game
             {
                 return;
             }
-            // DamageManger.Instance.Damage(projectile.DamageId, characterElement.ActorInstanceId);
+            DamageManger.Instance.Damage(projectile.DamageId, characterElement.ActorInstanceId);
             _projectileView?.PlayProjectileHit(projectileInstanceId,hitInfo);
             DestroyProjectile(projectileInstanceId);
         }

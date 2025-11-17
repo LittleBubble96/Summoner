@@ -38,6 +38,7 @@ namespace GameLogic.Game
             {
                 effect.OnUpdate(deltaTime);
             }
+            ProcessRecycleEffect();
         }
 
         private void ProcessRecycleEffect()

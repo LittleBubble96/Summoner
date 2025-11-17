@@ -60,7 +60,7 @@ namespace GameLogic.Game
             //实际销毁
             if (_projectileViews.TryGetValue(instanceId,out var projectileView))
             {
-                PoolManager.Instance.PushObject(projectileView);
+                PoolManager.Instance.PushGameObject(projectileView.gameObject);
                 projectileView.gameObject.SetActive(false);
                 _projectileViews.Remove(instanceId);
             }
@@ -78,7 +78,7 @@ namespace GameLogic.Game
         {
             foreach (var projectItemView in _projectileViews)
             {
-                PoolManager.Instance.PushObject(projectItemView.Value);
+                PoolManager.Instance.PushGameObject(projectItemView.Value.gameObject);
             }
             _projectileViews.Clear();
         }

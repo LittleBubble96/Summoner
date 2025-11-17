@@ -51,7 +51,7 @@ namespace GameLogic.Game
             // 处理死亡倒计时
             if (_deathTimer > 0)
             {
-                _deathTimer -= dt;
+                _deathTimer -= dt * 1000;
                 if (_deathTimer <= 0)
                 {
                     DeathComplete();

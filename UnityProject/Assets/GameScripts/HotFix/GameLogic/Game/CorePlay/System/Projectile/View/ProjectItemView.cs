@@ -12,7 +12,7 @@ namespace GameLogic.Game
             transform.forward = _projectile.CurrentDirection;
             //播放枪口特效
             EffectManager.Instance.PlayFixedEffect(_projectile.ProjectileConfig.ShootEffect,
-                _projectile.CurrentPosition, Quaternion.LookRotation(_projectile.CurrentDirection));
+                _projectile.CurrentPosition, Quaternion.LookRotation(_projectile.CurrentDirection),null,1f);
         }
 
         public void DoUpdate(float dt)
@@ -59,7 +59,7 @@ namespace GameLogic.Game
         public void PlayHitEffect(RaycastHit hitInfo)
         {
             EffectManager.Instance.PlayFixedEffect(_projectile.ProjectileConfig.HitEffect,
-                hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
+                hitInfo.point, Quaternion.LookRotation(hitInfo.normal),null,1f);
         }
     }
 }
