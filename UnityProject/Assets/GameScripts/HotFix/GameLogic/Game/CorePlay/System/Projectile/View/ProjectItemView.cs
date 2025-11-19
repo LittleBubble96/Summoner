@@ -19,39 +19,50 @@ namespace GameLogic.Game
         {
             Vector3 startPos = transform.position;
             Vector3 endPos = _projectile.CurrentPosition;
-            //射线检测
-            Ray ray = new Ray(startPos, endPos - startPos);
-            var raycastResults = Physics.RaycastAll(ray, Vector3.Distance(startPos, endPos), LayerDefine.LayerProjectileHit);
-            if (raycastResults is { Length: > 0 })
+            Ray floorRay = new Ray(startPos, Vector3.down);
+            if (Physics.Raycast(floorRay, out var hitInfo, LayerDefine.LayerFloorLayer))
             {
-                float minDis = float.MaxValue;
-                int hitIndex = -1;
-                CharacterBaseView characterBaseView = null;
-                for (int i = 0; i < raycastResults.Length; i++)
+                int lineCount = (int)((startPos.y - hitInfo.point.y) / ProjectileDefine.RayCastInternal) + 1;
+                for (int rayIndex = 0; rayIndex < lineCount; rayIndex++)
                 {
-                    CharacterBaseView characterView = raycastResults[i].transform.GetComponentInParent<CharacterBaseView>();
-                    if (characterView)
+                    var rayStart = startPos - Vector3.down * ProjectileDefine.RayCastInternal * rayIndex;
+                    var rayEnd = endPos - Vector3.down * ProjectileDefine.RayCastInternal * rayIndex;
+                    //射线检测
+                    Ray ray = new Ray(rayStart, rayEnd - rayStart);
+                    var raycastResults = Physics.RaycastAll(ray, Vector3.Distance(rayStart, rayEnd), LayerDefine.LayerProjectileHit);
+                    if (raycastResults is { Length: > 0 })
                     {
-                        bool canHit = ProjectileManager.Instance.CanHitCharacter(_projectile.InstanceId, characterView.CharacterElement);
-                        if (!canHit)
+                        float minDis = float.MaxValue;
+                        int hitIndex = -1;
+                        CharacterBaseView characterBaseView = null;
+                        for (int i = 0; i < raycastResults.Length; i++)
                         {
-                            continue;
+                            CharacterBaseView characterView = raycastResults[i].transform.GetComponentInParent<CharacterBaseView>();
+                            if (characterView)
+                            {
+                                bool canHit = ProjectileManager.Instance.CanHitCharacter(_projectile.InstanceId, characterView.CharacterElement);
+                                if (!canHit)
+                                {
+                                    continue;
+                                }
+                            }
+                            float dis = Vector3.Distance(rayStart, raycastResults[i].point);
+                            if (dis < minDis)
+                            {
+                                minDis = dis;
+                                hitIndex = i;
+                                characterBaseView = characterView;
+                            }
+                        }
+
+                        if (hitIndex != -1)
+                        {
+                            ProjectileManager.Instance.HitProjectile(_projectile.InstanceId,raycastResults[hitIndex],characterBaseView ? characterBaseView.CharacterElement:null);
                         }
                     }
-                    float dis = Vector3.Distance(startPos, raycastResults[i].point);
-                    if (dis < minDis)
-                    {
-                        minDis = dis;
-                        hitIndex = i;
-                        characterBaseView = characterView;
-                    }
-                }
-
-                if (hitIndex != -1)
-                {
-                    ProjectileManager.Instance.HitProjectile(_projectile.InstanceId,raycastResults[hitIndex],characterBaseView ? characterBaseView.CharacterElement:null);
                 }
             }
+            
             transform.position = _projectile.CurrentPosition;
             transform.forward = _projectile.CurrentDirection;
         }

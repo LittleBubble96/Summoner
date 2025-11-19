@@ -8,5 +8,8 @@ namespace GameLogic.Game
         public static LayerMask Grid = 1 << 6;
         //子弹射线检测
         public static LayerMask LayerProjectileHit = (1 << 7) | (1 << 8);
+        
+        //地板
+        public static LayerMask LayerFloorLayer = 1 << 9;
     }
 }

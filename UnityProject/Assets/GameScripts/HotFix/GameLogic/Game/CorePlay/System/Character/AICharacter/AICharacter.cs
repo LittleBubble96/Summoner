@@ -66,6 +66,7 @@ namespace GameLogic.Game
         public override void Death()
         {
             base.Death();
+            NavToStop();
             _deathTimer = RoleConfig.DeathTime;
         }
 

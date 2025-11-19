@@ -43,7 +43,7 @@ namespace GameLogic.Game
                         break;
                     }
                 }
-                _timerCount = int.MinValue;
+                _timerCount = 0;
             }
         }
 
