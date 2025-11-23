@@ -15,8 +15,10 @@ namespace GameLogic.Game
             {
                 Log.Warning($"角色已经存在该组件{typeof(T)}");
                 return;
-            }    
-            m_ActorComponents.Add(typeof(T), ReferencePool.Acquire<T>());
+            }
+            T component = ReferencePool.Acquire<T>();
+            component.RegisterEvent();
+            m_ActorComponents.Add(typeof(T), component);
         }
 
         public T GetComponent<T>() where T : ActorComponent, new()
@@ -32,6 +34,7 @@ namespace GameLogic.Game
         {
             foreach (var component in m_ActorComponents)
             {
+                component.Value.UnRegisterEvent();
                 ReferencePool.Release(component.Value);
             }
             m_ActorComponents.Clear();

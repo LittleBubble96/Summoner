@@ -55,8 +55,9 @@ namespace GameLogic.Game
                     float maxAngleChange = angleSpeed * Time.deltaTime;
                     float angleChange = Mathf.Clamp(angle, -maxAngleChange, maxAngleChange);
                     transform.Rotate(0, angleChange, 0);
-                    
-                    m_characterController.Move(moveDir * speed * Time.deltaTime);
+
+                    var gravity = new Vector3(0, -9.8f, 0);
+                    m_characterController.Move((moveDir * speed + gravity) * Time.deltaTime);
                     // 更新位置
                     MainCharacter.SetPosition(transform.position);
                     MainCharacter.SetRotation(transform.eulerAngles);

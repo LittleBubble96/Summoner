@@ -74,6 +74,16 @@ namespace GameLogic.Game
             _onSkillComplete = complete;
         }
 
+        public bool CheckExecute()
+        {
+            CharacterElement element = CharacterManager.Instance.GetCharacter(_ownerActorInstanceId);
+            if (element != null)
+            {
+                return !element.IsDead();
+            }
+            return false;
+        }
+
         public bool OnUpdate(float dt)
         {
             dt *= _timeLineScale;

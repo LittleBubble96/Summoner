@@ -58,6 +58,10 @@ namespace GameLogic.Game
         {
             foreach (var behavior in Behaviors)
             {
+                if (behavior.State == BehaviorState.Running)
+                {
+                    behavior.OnExit();
+                }
                 ReferencePool.Release(behavior);
             }
             Behaviors.Clear();

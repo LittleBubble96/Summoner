@@ -64,6 +64,7 @@ public class BTPetHatedTN : BTTaskNode
                 if (ds < distance)
                 {
                     targetId = character.Key;
+                    distance = ds;
                 }
             }
         }

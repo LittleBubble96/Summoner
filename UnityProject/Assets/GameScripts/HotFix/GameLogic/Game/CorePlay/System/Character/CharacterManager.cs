@@ -38,7 +38,7 @@ namespace GameLogic.Game
             _enemyManager.OnUpdate();
             foreach (var character in CharacterDic.Values)
             {
-                character.DoUpdate(Time.deltaTime);
+                character.Update(Time.deltaTime);
             }
             if (CharacterView!=null)
             {
@@ -83,7 +83,12 @@ namespace GameLogic.Game
             }
             return null;
         }
-        
+
+        public CharacterElement MainCharacter()
+        {
+            return CharacterManager.Instance.GetCharacter(MainActorId);
+        }
+
         public Dictionary<ActorInstanceId,CharacterElement> GetAllCharacter()
         {
             return CharacterDic;

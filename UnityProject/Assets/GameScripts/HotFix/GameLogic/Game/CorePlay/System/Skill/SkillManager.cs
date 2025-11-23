@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Buffers;
 using System.Collections.Generic;
-using System.Runtime.Serialization.Formatters.Binary;
 using GameBase;
 using GameFramework;
 using UnityEngine;
-using UnityGameFramework.Runtime;
 
 namespace GameLogic.Game
 {
@@ -50,7 +47,11 @@ namespace GameLogic.Game
             base.OnUpdate();
             for (int i = _skillTimeLines.Count - 1; i >= 0; i--)
             {
-                bool isComplete = _skillTimeLines[i].OnUpdate(Time.deltaTime);
+                bool isComplete = true;
+                if (_skillTimeLines[i].CheckExecute())
+                {
+                    isComplete = _skillTimeLines[i].OnUpdate(Time.deltaTime); 
+                }
                 if (isComplete)
                 {
                     _skillTimeLines[i].BroadcastSkillComplete();

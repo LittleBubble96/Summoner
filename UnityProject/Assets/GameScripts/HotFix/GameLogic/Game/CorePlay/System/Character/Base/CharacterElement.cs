@@ -56,7 +56,16 @@ namespace GameLogic.Game
             
         }
 
-        public virtual void DoUpdate(float dt)
+        public void Update(float dt)
+        {
+            foreach (var actorComponent in m_ActorComponents)
+            {
+                actorComponent.Value.DoUpdate(dt);
+            }
+            DoUpdate(dt);
+        }
+
+        protected virtual void DoUpdate(float dt)
         {
            
         }

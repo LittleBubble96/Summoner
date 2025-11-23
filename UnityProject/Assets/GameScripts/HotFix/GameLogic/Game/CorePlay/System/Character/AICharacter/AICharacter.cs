@@ -46,7 +46,7 @@ namespace GameLogic.Game
             SetAttackSpeed(RoleConfig.AttackSpeed);
         }
 
-        public override void DoUpdate(float dt)
+        protected override void DoUpdate(float dt)
         {
             // 处理死亡倒计时
             if (_deathTimer > 0)

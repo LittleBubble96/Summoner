@@ -1,4 +1,5 @@
 using System;
+using GameLogic.Game;
 
 public class BT_1001 : BTCfgBase
 {
@@ -28,7 +29,7 @@ public class BT_1001 : BTCfgBase
                         new ConfBTCShape()
                         {
                             Description = "目标选择",
-                            BTNodeType = typeof(BTPetHatedTN),
+                            BTNodeType = typeof(BTPetHateNearByMainTN),
                         },
                         new ConfBTCShape()
                         {
