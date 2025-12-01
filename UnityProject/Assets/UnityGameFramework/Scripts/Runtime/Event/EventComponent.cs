@@ -154,6 +154,17 @@ namespace UnityGameFramework.Runtime
         /// <summary>
         /// 抛出事件立即模式，这个操作不是线程安全的，事件会立刻分发。
         /// </summary>
+        public void FireNow<T>(object sender, int eventId ,T param)
+        {
+            GameEventCustomOneParam<T> eventCustom = ReferencePool.Acquire<GameEventCustomOneParam<T>>();
+            eventCustom.CustomId = eventId;
+            eventCustom.Param = param;
+            m_EventManager.FireNow(sender, eventCustom);
+        }
+        
+        /// <summary>
+        /// 抛出事件立即模式，这个操作不是线程安全的，事件会立刻分发。
+        /// </summary>
         public void FireNow<T,T1>(object sender, int eventId ,T param,T1 param1)
         {
             GameEventCustomTwoParam<T,T1> eventCustom = ReferencePool.Acquire<GameEventCustomTwoParam<T,T1>>();
@@ -161,7 +172,6 @@ namespace UnityGameFramework.Runtime
             eventCustom.Param = param;
             eventCustom.Param1 = param1;
             m_EventManager.FireNow(sender, eventCustom);
-            ReferencePool.Release(eventCustom);
         }
         
         /// <summary>

@@ -6,7 +6,7 @@ public class BTPetAttackTN : BTTaskNode
     private bool m_isInSkilling;
     protected override void OnRecycle()
     {
-       
+        m_isInSkilling = false;
     }
 
     protected override void OnBegin()

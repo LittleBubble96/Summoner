@@ -5,6 +5,7 @@
         //转hashcode
         public static int CreateCharacterEventName = "CreateCharacter".GetHashCode();
         public static int CharacterAnimationSetBoolEventName = "CharacterAnimationSetBoolEventName".GetHashCode();
+        public static int CharacterDeathEventName = "CharacterDeathEventName".GetHashCode();
         
         //UICorePlay
         public static int PlayerControllerDownEventName = "PlayerControllerDownEventName".GetHashCode();

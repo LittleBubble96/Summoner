@@ -130,8 +130,43 @@ namespace GameLogic.Game
                 if (characterElement.Hp <= 0)
                 {
                     characterElement.Death();
+                    XYEvent.GEvent.FireNow(this,EventDefine.CharacterDeathEventName,actorInstanceId);
+                    foreach (var character in CharacterDic)
+                    {
+                        character.Value.GetComponent<AroundGroupComponent>().RemoveAround(actorInstanceId);
+                    }
                 }
             }
+        }
+
+        public void AttachCharacter(ActorInstanceId self , ActorInstanceId target)
+        {
+            CharacterElement selfCharacter = GetCharacter(self);
+            CharacterElement targetCharacter = GetCharacter(target);
+            if (selfCharacter == null || selfCharacter.IsDead() || targetCharacter == null || targetCharacter.IsDead())
+            {
+                return;
+            }
+
+            AroundGroupComponent selfAround = selfCharacter.GetComponent<AroundGroupComponent>();
+            if (selfAround.AttachActorId.IsValid())
+            {
+                AroundGroupComponent targetAroundOld = GetCharacter(selfAround.AttachActorId).GetComponent<AroundGroupComponent>();
+                targetAroundOld.RemoveAround(selfAround.AttachActorId);
+            }
+
+            AroundGroupComponent targetAround = targetCharacter.GetComponent<AroundGroupComponent>();
+            selfAround.AttachActorId = target;
+            targetAround.AddAround(self);
+        }
+
+        public void RemoveAttachCharacter(ActorInstanceId self)
+        {
+            CharacterElement selfCharacter = GetCharacter(self);
+            AroundGroupComponent selfAround = selfCharacter.GetComponent<AroundGroupComponent>();
+            CharacterElement targetCharacter = GetCharacter(selfAround.AttachActorId);
+            selfAround.AttachActorId = default;
+            targetCharacter.GetComponent<AroundGroupComponent>().RemoveAround(self);
         }
 
 

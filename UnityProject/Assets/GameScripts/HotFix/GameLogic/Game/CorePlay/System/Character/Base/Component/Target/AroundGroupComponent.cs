@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using GameFramework;
+using GameFramework.Event;
 using UnityEngine;
 
 namespace GameLogic.Game
@@ -7,14 +8,22 @@ namespace GameLogic.Game
     public class AroundGroupComponent : ActorComponent
     {
         private float _range;
+
+        private float _rotateSpeed;
+
+        private float _curRotate;
         
         private Dictionary<ActorInstanceId,AroundElement> _aroundElements;
 
+        public ActorInstanceId AttachActorId { get; set; }
 
-        public void Init(float range)
+
+        public void Init(float range , float rotateSpeed)
         {
             _range = range;
+            _rotateSpeed = rotateSpeed;
             _aroundElements = new Dictionary<ActorInstanceId, AroundElement>();
+            _curRotate = 0;
         }
 
         public void AddAround(ActorInstanceId actorInstanceId)
@@ -28,67 +37,93 @@ namespace GameLogic.Game
             aroundElement.SetTarget(_aroundElements.Count - 1 , _aroundElements.Count , _range);
         }
 
-        public override void RegisterEvent()
+        public void RemoveAround(ActorInstanceId actorInstanceId)
         {
-            
+            if (_aroundElements.ContainsKey(actorInstanceId))
+            {
+                return;
+            }
+            _aroundElements.Remove(actorInstanceId);
         }
 
-        public override void UnRegisterEvent()
+        public Vector3? GetTarget(ActorInstanceId actorInstanceId)
         {
-            
+            if (_aroundElements.TryGetValue(actorInstanceId,out var aroundElement))
+            {
+                return  Quaternion.Euler(new Vector3(0, _curRotate, 0)) * aroundElement.GetTarget();
+            }
+
+            return null;
         }
+        
 
         public override void DoUpdate(float dt)
         {
-            foreach (var around in _aroundElements)
+            UpdateSelf(dt);
+            UpdateAttachPos();
+        }
+
+        private void UpdateSelf(float dt)
+        {
+            _curRotate += _rotateSpeed * dt;
+            _curRotate %= 360;
+        }
+
+        //更新位置信息
+        private void UpdateAttachPos()
+        {
+            if (AttachActorId.IsValid())
             {
-                around.Value.DoUpdate(dt);
+                CharacterElement attached = CharacterManager.Instance.GetCharacter(AttachActorId);
+                Vector3? target = attached.GetComponent<AroundGroupComponent>().GetTarget(OwnerId);
+                CharacterElement self = CharacterManager.Instance.GetCharacter(OwnerId);
+                if (target != null && !self.IsDead() && self is AICharacter aiCharacter)
+                {
+                    aiCharacter.NavToTarget(target.Value + attached.GetPosition());
+                }
             }
+        }
+
+
+        public override void Clear()
+        {
+            base.Clear();
+            _range = 0;
+            foreach (var aroundElement in _aroundElements)
+            {
+                ReferencePool.Release(aroundElement.Value);
+            }
+            _aroundElements.Clear();
+            _curRotate = 0;
+            _rotateSpeed = 0;
+            AttachActorId = default;
         }
     }
 
     public class AroundElement : IReference
     {
         private Vector3 _targetPos;
-
-        private Vector3 _startPos;
-
-        private Vector2? _curPos;
-
-        private float _timer;
-
-        private readonly float _lTime = 1f;
+        
         
         public void SetTarget(int index , int count , float range)
         {
             _targetPos = CalTargetPos(index, count, range);
-            _timer = _lTime;
-            if (_curPos == null)
-            {
-                _curPos = _targetPos;
-                _startPos = _targetPos;
-            }
+          
         }
 
         public void DoUpdate(float dt)
         {
-            if (_timer > 0)
-            {
-                _timer -= dt;
-                float t = 1 - _timer / _lTime;
-                _curPos = Vector3.Lerp(_startPos, _targetPos, t);
-            }
-            else
-            {
-                _curPos = _targetPos;
-            }
+            
+        }
+
+        public Vector3 GetTarget()
+        {
+            return _targetPos;
         }
 
         public void Clear()
         {
             _targetPos = Vector3.zero;
-            _curPos = null;
-            _timer = 0;
         }
 
         private Vector3 CalTargetPos(int index , int count , float range)

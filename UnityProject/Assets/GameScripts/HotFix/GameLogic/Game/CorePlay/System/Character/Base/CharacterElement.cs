@@ -49,6 +49,8 @@ namespace GameLogic.Game
         protected virtual void RegisterActorComponent()
         {
             RegisterComponent<TargetComponent>();
+            RegisterComponent<AroundGroupComponent>();
+            GetComponent<AroundGroupComponent>().Init(3,180);
         }
 
         protected virtual void OnInitAttribute()

@@ -4,6 +4,12 @@ namespace GameLogic.Game
 {
     public class ActorComponent : IReference
     {
+        public ActorInstanceId OwnerId;
+        public void Init(ActorInstanceId ownerId)
+        {
+            OwnerId = ownerId;
+        }
+
         public virtual void RegisterEvent()
         {
             
@@ -21,7 +27,7 @@ namespace GameLogic.Game
 
         public virtual void Clear()
         {
-            
+            OwnerId = default;
         }
     }
 }

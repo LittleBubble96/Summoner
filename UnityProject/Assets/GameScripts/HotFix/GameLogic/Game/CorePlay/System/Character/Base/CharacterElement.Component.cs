@@ -17,6 +17,7 @@ namespace GameLogic.Game
                 return;
             }
             T component = ReferencePool.Acquire<T>();
+            component.Init(ActorInstanceId);
             component.RegisterEvent();
             m_ActorComponents.Add(typeof(T), component);
         }
