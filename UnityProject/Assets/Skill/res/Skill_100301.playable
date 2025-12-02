@@ -246,7 +246,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8cbd5701501412caf77c9f141831b89, type: 3}
   m_Name: ProjectileParameterClip
   m_EditorClassIdentifier: 
-  projectileId: 1001
+  projectileId: 1002
   position: {x: 0, y: 0.738, z: 0.433}
   rotation: {x: 0, y: 0, z: 0}
 --- !u!114 &6981843682668013914

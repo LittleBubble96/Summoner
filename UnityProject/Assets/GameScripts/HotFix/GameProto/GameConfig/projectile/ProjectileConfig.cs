@@ -20,9 +20,7 @@ public sealed partial class ProjectileConfig : Luban.BeanBase
         Name = _buf.ReadString();
         Desc = _buf.ReadString();
         MoveType = _buf.ReadInt();
-        ShootEffect = _buf.ReadString();
-        HitEffect = _buf.ReadString();
-        ProjectileRes = _buf.ReadString();
+        ProjectileRes = _buf.ReadInt();
         Speed = _buf.ReadFloat();
         Gravity = _buf.ReadFloat();
         DamageSource = _buf.ReadInt();
@@ -52,17 +50,9 @@ public sealed partial class ProjectileConfig : Luban.BeanBase
     /// </summary>
     public readonly int MoveType;
     /// <summary>
-    /// 射击特效
-    /// </summary>
-    public readonly string ShootEffect;
-    /// <summary>
-    /// 击中特效
-    /// </summary>
-    public readonly string HitEffect;
-    /// <summary>
     /// 子弹资源
     /// </summary>
-    public readonly string ProjectileRes;
+    public readonly int ProjectileRes;
     /// <summary>
     /// 子弹速度
     /// </summary>
@@ -98,8 +88,6 @@ public sealed partial class ProjectileConfig : Luban.BeanBase
         + "name:" + Name + ","
         + "desc:" + Desc + ","
         + "moveType:" + MoveType + ","
-        + "ShootEffect:" + ShootEffect + ","
-        + "HitEffect:" + HitEffect + ","
         + "ProjectileRes:" + ProjectileRes + ","
         + "Speed:" + Speed + ","
         + "Gravity:" + Gravity + ","

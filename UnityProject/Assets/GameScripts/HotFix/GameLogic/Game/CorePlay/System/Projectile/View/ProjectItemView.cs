@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using GameConfig.projectile;
+using UnityEngine;
 
 namespace GameLogic.Game
 {
@@ -11,7 +12,7 @@ namespace GameLogic.Game
             transform.position = _projectile.CurrentPosition;
             transform.forward = _projectile.CurrentDirection;
             //播放枪口特效
-            EffectManager.Instance.PlayFixedEffect(_projectile.ProjectileConfig.ShootEffect,
+            EffectManager.Instance.PlayFixedEffect(_projectile.ProjectileResConfig.ShootEffect,
                 _projectile.CurrentPosition, Quaternion.LookRotation(_projectile.CurrentDirection),null,1f);
         }
 
@@ -69,7 +70,7 @@ namespace GameLogic.Game
 
         public void PlayHitEffect(RaycastHit hitInfo)
         {
-            EffectManager.Instance.PlayFixedEffect(_projectile.ProjectileConfig.HitEffect,
+            EffectManager.Instance.PlayFixedEffect(_projectile.ProjectileResConfig.HitEffect,
                 hitInfo.point, Quaternion.LookRotation(hitInfo.normal),null,1f);
         }
     }

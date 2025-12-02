@@ -31,7 +31,7 @@ namespace GameLogic.Game
 
         public void CreateProjectile(Projectile projectile)
         {
-            GameObject projectileObj = PoolManager.Instance.GetGameObject(projectile.ProjectileConfig.ProjectileRes,_parent);
+            GameObject projectileObj = PoolManager.Instance.GetGameObject(projectile.ProjectileResConfig.ProjectileRes,_parent);
             ProjectItemView projectileView = projectileObj.GetComponent<ProjectItemView>();
             if (projectileView == null)
             {

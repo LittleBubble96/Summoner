@@ -51,6 +51,24 @@ public partial class Tables
             m_TbProjectile.ResolveRef(this);
         }
     }
+    private projectile.TbProjectileRes m_TbProjectileRes;
+    public projectile.TbProjectileRes TbProjectileRes 
+    {
+        get
+        {
+            if (m_TbProjectileRes == null)
+            {
+                m_TbProjectileRes = new projectile.TbProjectileRes(defaultLoader("projectile_tbprojectileres"));
+                m_TbProjectileRes.ResolveRef(this);
+            }
+            return m_TbProjectileRes;
+        }
+        set
+        {
+            m_TbProjectileRes = value;
+            m_TbProjectileRes.ResolveRef(this);
+        }
+    }
     private buff.TbBuff m_TbBuff;
     public buff.TbBuff TbBuff 
     {

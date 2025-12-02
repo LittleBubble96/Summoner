@@ -40,7 +40,9 @@ namespace GameLogic.Game
             projectileData.OwnerId = ownerId;
             ProjectileInstanceId instanceId = ProjectileInstanceId.NewId();
             ProjectileConfig config = ConfigSystem.Instance.Tables.TbProjectile.Get(projectId);
-            projectile.Init(instanceId,config, position, direction ,projectileData);
+            ProjectileResConfig resConfig = ConfigSystem.Instance.Tables.TbProjectileRes.Get(config.ProjectileRes);
+
+            projectile.Init(instanceId,config,resConfig, position, direction ,projectileData);
             _projectiles.Add(instanceId,projectile);
             _projectileView?.CreateProjectile(projectile);
         }
