@@ -1,4 +1,6 @@
-﻿namespace GameLogic.Game
+﻿using UnityEngine;
+
+namespace GameLogic.Game
 {
     public class BaseDamageBuff : BuffItem
     {
@@ -24,6 +26,8 @@
                 _baseDamage = belongToElement.PhysicalAttack;
             }
             CharacterManager.Instance.DamageCharacter(AttachToActor,_baseDamage,DamageSourceType.PhysicalAttack);
+            CharacterElement characterElement = CharacterManager.Instance.GetCharacter(AttachToActor);
+            characterElement.SetVelocity(Vector3.zero);
         }
     }
 }

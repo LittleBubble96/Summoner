@@ -77,9 +77,15 @@ namespace GameLogic.Game
             return Hp <= 0;
         }
 
+        public void SetVelocity(Vector3 v)
+        {
+            m_CharacterView?.SetVelocity(v);
+        }
+
         public void Damage(int value,DamageSourceType damageSourceType)
         {
             IncreaseHp(value,damageSourceType);
+            m_CharacterView?.Damage();
         }
 
         public virtual void Death()

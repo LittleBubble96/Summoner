@@ -37,13 +37,23 @@ namespace GameLogic.Game
         {
             
         }
-        
+
+        public virtual void SetVelocity(Vector3 v)
+        {
+            
+        }
+
         //死亡回调
         public virtual void Death()
         {
             
         }
-        
+
+        public virtual void Damage()
+        {
+            
+        }
+
         //死亡完成回调
         public virtual void DeathComplete()
         {

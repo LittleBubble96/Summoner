@@ -1,7 +1,11 @@
-﻿namespace GameLogic.Game
+﻿using UnityEngine;
+
+namespace GameLogic.Game
 {
     public interface ICharacterItemView
     {
+        void SetVelocity(Vector3 v);
+        void Damage();
         void Death();
 
         void DeathComplete();

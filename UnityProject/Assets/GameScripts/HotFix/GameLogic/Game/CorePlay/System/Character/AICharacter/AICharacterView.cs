@@ -9,6 +9,7 @@ namespace GameLogic.Game
     {
         public AICharacter AICharacterData { get; set; }
         private NavMeshAgent agent;
+        private float _damageTimerCount = 0;
     
         protected override void OnInitCharacter()
         {
@@ -56,12 +57,50 @@ namespace GameLogic.Game
             }
             CharacterElement.SetPosition(transform.position);
             CharacterElement.SetRotation(transform.eulerAngles);
+            UpdateDamage(dt);
+        }
+
+        private void UpdateDamage(float dt)
+        {
+            if (_damageTimerCount > 0)
+            {
+                _damageTimerCount -= dt;
+                if (_damageTimerCount <=0)
+                {
+                    StopDamage();
+                }
+            }
+        }
+
+        private void StopDamage()
+        {
+            _damageTimerCount = 0;
+            AICharacterData.SetAnimationBool("Damage",false);
         }
 
         public override void Death()
         {
             base.Death();
+            StopDamage();
             AICharacterData.SetAnimationBool("Death",true);
+        }
+
+        public override void SetVelocity(Vector3 v)
+        {
+            base.SetVelocity(v);
+            agent.velocity = v;
+        }
+
+        public override void Damage()
+        {
+            base.Damage();
+            if (AICharacterData.IsDead())
+            {
+                return;
+            }
+            AICharacterData.SetAnimationBool("Damage",true);
+            _damageTimerCount = 0.375f;
+            agent.velocity = Vector3.zero;
         }
     }
 }
