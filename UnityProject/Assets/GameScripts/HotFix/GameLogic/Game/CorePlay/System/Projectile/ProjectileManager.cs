@@ -140,7 +140,10 @@ namespace GameLogic.Game
             }
             DamageManger.Instance.Damage(projectile.DamageId, characterElement.ActorInstanceId);
             _projectileView?.PlayProjectileHit(projectileInstanceId,hitInfo);
-            DestroyProjectile(projectileInstanceId);
+            if (projectile.IsHitDestroy)
+            {
+                DestroyProjectile(projectileInstanceId);
+            }
         }
 
         //清除场景

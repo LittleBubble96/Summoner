@@ -11,6 +11,9 @@ namespace GameLogic
         public Vector3 Current { get; set; }
         public Vector3 CurrentDirection { get; set; }
 
+        //移动距离
+        public float Distance => Vector3.Distance(Current, StartPosition);
+
         public void Init(Vector3 startPos , Vector3 direction, ProjectileConfig projectileConfig)
         {
             StartPosition = startPos;

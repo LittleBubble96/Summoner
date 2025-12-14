@@ -1,4 +1,5 @@
 using GameLogic.Game;
+using GameLogic.Game.Common;
 using UnityEngine;
 
 public class BTPetAttackTN : BTTaskNode
@@ -11,7 +12,7 @@ public class BTPetAttackTN : BTTaskNode
 
     protected override void OnBegin()
     {
-        m_isInSkilling = true;
+        m_isInSkilling = false;
         SkillManager.Instance.ExecuteSkill(behaviorTree.GetOwnerCharacter().RoleConfig.NormalSkillId,behaviorTree.GetOwnerCharacter().ActorInstanceId, () =>
         {
             m_isInSkilling = false;

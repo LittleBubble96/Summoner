@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using GameLogic.Game.Common;
+using UnityEngine;
 
 namespace GameLogic.Game
 {

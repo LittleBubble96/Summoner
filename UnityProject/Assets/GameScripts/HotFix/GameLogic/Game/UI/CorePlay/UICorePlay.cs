@@ -11,6 +11,7 @@ namespace GameLogic.Game
         private float m_maxRadius = 200f;
         private XYButton m_button;
         private XYButton m_button1003;
+        private XYButton m_button1004;
 
         protected override void ScriptGenerator()
         {
@@ -19,6 +20,7 @@ namespace GameLogic.Game
             m_dirInput = FindChildComponent<RectTransform>("Bg/InputView/m_dirInput");
             m_button = CreateWidget<XYButton>("Bg/test_button/m_createBtn");
             m_button1003 = CreateWidget<XYButton>("Bg/test_button/m_createBtn1003");
+            m_button1004 = CreateWidget<XYButton>("Bg/test_button/m_createBtn1004");
 
         }
         
@@ -37,6 +39,7 @@ namespace GameLogic.Game
             XYEvent.GEvent.Subscribe(EventDefine.PlayerControllerDragEventName, OnPlayerControllerDrag);
             m_button.AddListener(OnClickCreateBtn);
             m_button1003.AddListener(OnClickCreateBtn1003);
+            m_button1004.AddListener(OnClickCreateBtn1004);
 
         }
 
@@ -48,6 +51,11 @@ namespace GameLogic.Game
         private void OnClickCreateBtn1003()
         {
             CharacterManager.Instance.CreateAICharacter(1003, Vector3.zero, Vector3.zero, CharacterFactionType.Player);
+        }
+        
+        private void OnClickCreateBtn1004()
+        {
+            CharacterManager.Instance.CreateAICharacter(1004, Vector3.zero, Vector3.zero, CharacterFactionType.Player);
         }
 
         private void OnPlayerControllerDrag(object sender, GameEventArgs e)

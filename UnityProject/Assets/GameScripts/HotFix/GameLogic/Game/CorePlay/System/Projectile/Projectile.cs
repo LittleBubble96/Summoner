@@ -35,6 +35,9 @@ namespace GameLogic.Game
         //子弹伤害id
         public uint DamageId { get; set; }
 
+        //撞击是否被销毁
+        public bool IsHitDestroy => ProjectileConfig.IsHitDestroy;
+
         public void Init(ProjectileInstanceId instanceId ,ProjectileConfig projectileConfig , ProjectileResConfig resConfig, Vector3 position , Vector3 direction , ProjectileData projectileData)
         {
             InstanceId = instanceId;
@@ -53,6 +56,10 @@ namespace GameLogic.Game
             if (Behavior != null)
             {
                 Behavior.DoUpdate(dt);
+                if (Behavior.Distance >= ProjectileConfig.Distance)
+                {
+                    DestroySelf();
+                }
             }
         }
 

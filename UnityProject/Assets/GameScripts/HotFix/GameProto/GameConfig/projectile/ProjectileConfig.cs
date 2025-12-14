@@ -22,6 +22,8 @@ public sealed partial class ProjectileConfig : Luban.BeanBase
         MoveType = _buf.ReadInt();
         ProjectileRes = _buf.ReadInt();
         Speed = _buf.ReadFloat();
+        Distance = _buf.ReadFloat();
+        IsHitDestroy = _buf.ReadBool();
         Gravity = _buf.ReadFloat();
         DamageSource = _buf.ReadInt();
         DamageType = _buf.ReadInt();
@@ -58,6 +60,14 @@ public sealed partial class ProjectileConfig : Luban.BeanBase
     /// </summary>
     public readonly float Speed;
     /// <summary>
+    /// 子弹距离
+    /// </summary>
+    public readonly float Distance;
+    /// <summary>
+    /// 碰撞是否销毁
+    /// </summary>
+    public readonly bool IsHitDestroy;
+    /// <summary>
     /// 重力
     /// </summary>
     public readonly float Gravity;
@@ -90,6 +100,8 @@ public sealed partial class ProjectileConfig : Luban.BeanBase
         + "moveType:" + MoveType + ","
         + "ProjectileRes:" + ProjectileRes + ","
         + "Speed:" + Speed + ","
+        + "Distance:" + Distance + ","
+        + "IsHitDestroy:" + IsHitDestroy + ","
         + "Gravity:" + Gravity + ","
         + "DamageSource:" + DamageSource + ","
         + "DamageType:" + DamageType + ","

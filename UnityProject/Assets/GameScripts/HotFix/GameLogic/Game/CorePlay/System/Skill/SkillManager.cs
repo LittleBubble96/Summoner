@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using GameBase;
 using GameFramework;
+using GameLogic.Game.Common;
 using UnityEngine;
 
 namespace GameLogic.Game
